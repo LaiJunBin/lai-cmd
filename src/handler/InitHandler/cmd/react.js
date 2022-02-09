@@ -27,7 +27,7 @@ const runInitJs = () => {
 const runInitReactTailwindCSS = () => {
   return new Promise((resolve, reject) => {
     const shell = spawn('npx', ['lai-cmd', 'init', 'react-tailwindcss'], {
-      stdio: 'ignore',
+      stdio: 'inherit',
       shell: true,
     })
 
@@ -60,7 +60,7 @@ const initBabelPresetReact = async () => {
 
   return new Promise((resolve, reject) => {
     const shell = spawn('npm', ['i', '-D', '@babel/preset-react'], {
-      stdio: 'ignore',
+      stdio: 'inherit',
       shell: true,
     })
 
