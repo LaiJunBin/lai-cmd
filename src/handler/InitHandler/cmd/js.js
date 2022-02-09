@@ -1,6 +1,5 @@
 const { spawn } = require('child_process')
 const Text = require('../../../lib/Text')
-const promptly = require('promptly')
 const fs = require('fs')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
