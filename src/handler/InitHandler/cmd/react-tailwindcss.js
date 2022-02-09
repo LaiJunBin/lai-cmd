@@ -112,7 +112,7 @@ ${fs.readFileSync(file).toString()}
 
       fs.writeFileSync(file, data)
 
-      console.log(Text.green('update tailwind config OK...'))
+      console.log(Text.green('update index.css OK...'))
       resolve()
     } catch (e) {
       console.log(e)
