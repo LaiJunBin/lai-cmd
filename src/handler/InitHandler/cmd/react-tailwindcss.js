@@ -16,7 +16,9 @@ const initConfig = () => {
 
     shell.on('close', (code) => {
       if (code !== 0) {
-        const error = `${Text.red('ERROR')}: [eslint] terminated code: ${code}`
+        const error = `${Text.red(
+          'ERROR'
+        )}: [init tailwind config] terminated code: ${code}`
         console.log(error)
         return reject(error)
       }
@@ -53,7 +55,7 @@ const installDependencies = async () => {
       if (code !== 0) {
         const error = `${Text.red(
           'ERROR'
-        )}: [prettier] terminated code: ${code}`
+        )}: [install tailwind] terminated code: ${code}`
         console.log(error)
         return reject(error)
       }
