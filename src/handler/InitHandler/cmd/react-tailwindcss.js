@@ -32,7 +32,9 @@ const installDependencies = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('tailwindcss postcss autoprefixer')
 
-  if (!requestYesOrNo('Would you like to install them now with npm? (y)')) {
+  if (
+    !(await requestYesOrNo('Would you like to install them now with npm? (y)'))
+  ) {
     console.log(
       `${Text.yellow(
         '[WARNING]'
