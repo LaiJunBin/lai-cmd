@@ -16,3 +16,4 @@ Source           | 描述  |
 --------------|-----|
 js    | 初始化 eslint, prettier, jsconfig(for vscode) |
 react-tailwindcss    | 在 react 專案 安裝和設定 tailwindcss |
+react    | 執行 init js 與 init react-tailwindcss 並設定 @babel/preset-react |
