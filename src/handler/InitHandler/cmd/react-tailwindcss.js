@@ -1,9 +1,9 @@
 const { spawn } = require('child_process')
 const Text = require('../../../lib/Text')
-const promptly = require('promptly')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const fs = require('fs')
+const { requestYesOrNo } = require('../../../utils')
 
 const initConfig = () => {
   console.log(Text.green('Init tailwindcss config.'))
@@ -29,26 +29,17 @@ const initConfig = () => {
 const installDependencies = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('tailwindcss postcss autoprefixer')
-  const flag =
-    (
-      await promptly.prompt(
-        'Would you like to install them now with npm? (y)',
-        {
-          default: 'y',
-        }
-      )
-    ).toLowerCase() !== 'n'
+
+  if (!requestYesOrNo('Would you like to install them now with npm? (y)')) {
+    console.log(
+      `${Text.yellow(
+        '[WARNING]'
+      )}: generate the config file first, please don't forget to install the dependencies.`
+    )
+    return
+  }
 
   return new Promise((resolve, reject) => {
-    if (!flag) {
-      console.log(
-        `${Text.yellow(
-          '[WARNING]'
-        )}: generate the config file first, please don't forget to install the dependencies.`
-      )
-      return resolve()
-    }
-
     const shell = spawn(
       'npm',
       ['i', '-D', 'tailwindcss', 'postcss', 'autoprefixer'],

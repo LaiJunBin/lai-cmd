@@ -4,6 +4,7 @@ const promptly = require('promptly')
 const fs = require('fs')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
+const { requestYesOrNo } = require('../../../utils')
 
 const initEslint = () => {
   console.log(Text.green('Start eslint init...'))
@@ -26,45 +27,20 @@ const initEslint = () => {
   })
 }
 
-const requestInitPrettier = async () => {
-  const flag =
-    (
-      await promptly.prompt('Do you want to initialize prettier? (y)', {
-        default: 'y',
-      })
-    ).toLowerCase() !== 'n'
-  return new Promise((resolve, reject) => {
-    if (flag) {
-      resolve()
-    } else {
-      reject(new Error('command canceled.'))
-    }
-  })
-}
-
 const initPrettier = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('prettier eslint-plugin-prettier eslint-config-prettier')
-  const flag =
-    (
-      await promptly.prompt(
-        'Would you like to install them now with npm? (y)',
-        {
-          default: 'y',
-        }
-      )
-    ).toLowerCase() !== 'n'
+
+  if (!(await requestYesOrNo('Would you like to install them now with npm?'))) {
+    console.log(
+      `${Text.yellow(
+        '[WARNING]'
+      )}: generate the config file first, please don't forget to install the dependencies.`
+    )
+    return
+  }
 
   return new Promise((resolve, reject) => {
-    if (!flag) {
-      console.log(
-        `${Text.yellow(
-          '[WARNING]'
-        )}: generate the config file first, please don't forget to install the dependencies.`
-      )
-      return resolve()
-    }
-
     const shell = spawn(
       'npm',
       [
@@ -95,6 +71,75 @@ const initPrettier = async () => {
   })
 }
 
+const initBabelEslintParser = async () => {
+  console.log(`The ${Text.green('requires')} the following dependencies: `)
+  console.log('@babel/eslint-parser')
+
+  if (!(await requestYesOrNo('Would you like to install them now with npm?'))) {
+    console.log(
+      `${Text.yellow(
+        '[WARNING]'
+      )}: update the eslint config file first, please don't forget to install the dependencies.`
+    )
+    return
+  }
+
+  return new Promise((resolve, reject) => {
+    const shell = spawn('npm', ['i', '-D', '@babel/eslint-parser'], {
+      stdio: 'inherit',
+      shell: true,
+    })
+
+    shell.on('close', (code) => {
+      if (code !== 0) {
+        const error = `${Text.red(
+          'ERROR'
+        )}: [@babel/eslint-parser] terminated code: ${code}`
+        console.log(error)
+        return reject(error)
+      }
+
+      console.log(Text.green('install @babel/eslint-parser success.'))
+      resolve()
+    })
+  })
+}
+
+const updateEslintConfigForBabelEslintParser = async () => {
+  console.log(Text.green('update eslint config for @babel/eslint-parser...'))
+
+  return await new Promise((resolve, reject) => {
+    try {
+      const dirs = fs.readdirSync('./')
+      const configs = dirs.filter((dir) => /^\.eslintrc/.test(dir))
+
+      if (configs.length === 0) {
+        throw new Error(`can't find eslint config file.`)
+      }
+
+      if (configs.length > 1) {
+        throw new Error('Uncertain the eslint config file.')
+      }
+
+      const configFile = configs[0]
+      const config = ConfigParser.parse(configFile)
+
+      config.parser = '@babel/eslint-parser'
+      if (!config.parserOptions) {
+        config.parserOptions = {}
+      }
+      config.parserOptions.requireConfigFile = false
+
+      Json2Config.write(configFile, config)
+      console.log(Text.green('update eslint config OK...'))
+      resolve()
+    } catch (e) {
+      console.log(e)
+      return reject(e)
+    }
+  })
+}
+
 const generatePrettierConfig = () => {
   console.log(Text.green('generate prettier config...'))
 
@@ -120,7 +165,7 @@ const generatePrettierConfig = () => {
   })
 }
 
-const updateEslintConfig = () => {
+const updateEslintConfigForPrettier = () => {
   console.log(Text.green('update eslint config for prettier...'))
 
   return new Promise((resolve, reject) => {
@@ -171,6 +216,8 @@ const generateJsConfig = () => {
     compilerOptions: {
       checkJs: true,
       baseUrl: './src',
+      target: 'ES2015',
+      moduleResolution: 'node',
     },
   }
 
@@ -190,12 +237,29 @@ const generateJsConfig = () => {
 }
 
 const InitJs = () => {
-  initEslint()
-    .then(requestInitPrettier)
-    .then(initPrettier)
-    .then(generatePrettierConfig)
-    .then(updateEslintConfig)
-    .finally(generateJsConfig)
+  requestYesOrNo('Do you want to initialize eslint?')
+    .then((res) => res && initEslint())
+    .then(() =>
+      requestYesOrNo('Do you want to use @babel/eslint-parser?').then(
+        (res) =>
+          res &&
+          initBabelEslintParser().then(updateEslintConfigForBabelEslintParser)
+      )
+    )
+    .then(() =>
+      requestYesOrNo('Do you want to initialize prettier?').then(
+        (res) =>
+          res &&
+          initPrettier()
+            .then(generatePrettierConfig)
+            .then(updateEslintConfigForPrettier)
+      )
+    )
+    .then(() =>
+      requestYesOrNo('Do you want to initialize jsconfig?').then(
+        (res) => res && generateJsConfig()
+      )
+    )
     .then(() => {
       console.log(Text.green('All done.'))
     })
