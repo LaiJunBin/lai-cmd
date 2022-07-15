@@ -17,3 +17,5 @@ Source           | Description  |
 js    | Init eslint and prettier and vscode jsconfig file. |
 react-tailwindcss    | Install and config tailwind for react project. |
 react    | Execute init js and react-tailwindcss and set @babel/preset-react. |
+vue-tailwindcss    | Install and config tailwind for vue3 project. |
+vue    | Init eslint and prettier and execute vue-tailwindcss cmd. |
