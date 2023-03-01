@@ -29,6 +29,7 @@ ConfigParser.register('.json', (file) =>
 )
 // eslint-disable-next-line no-eval
 ConfigParser.register('.js', (file) => eval(fs.readFileSync(file).toString()))
+ConfigParser.register('.cjs', (file) => eval(fs.readFileSync(file).toString()))
 
 ConfigParser.register('.yml', (file) =>
   yaml.load(fs.readFileSync(file).toString())

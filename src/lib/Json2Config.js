@@ -32,6 +32,11 @@ Json2Config.register(
   (json) => `module.exports = ${JSON.stringify(json, null, 2)}`
 )
 
+Json2Config.register(
+  '.cjs',
+  (json) => `module.exports = ${JSON.stringify(json, null, 2)}`
+)
+
 Json2Config.register('.yml', (json) => yaml.dump(json))
 
 module.exports = Json2Config
