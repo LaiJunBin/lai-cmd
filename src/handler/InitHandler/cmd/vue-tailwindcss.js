@@ -77,14 +77,11 @@ const updateConfig = () => {
       }
 
       const config = ConfigParser.parse(configFile)
-      const contents = [
-        './index.html',
-        './src/**/*.{vue,js,ts,jsx,tsx}'
-      ]
+      const contents = ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}']
 
       config.content = config.content || []
 
-      for (let content of contents) {
+      for (const content of contents) {
         if (!config.content.includes(content)) {
           config.content.push(content)
         }
@@ -112,7 +109,7 @@ const updateBaseCSS = () => {
 
         return './src/assets/main.css'
       })()
-      
+
       const content = (() => {
         if (fs.existsSync(file)) {
           return fs.readFileSync(file).toString()
@@ -121,7 +118,9 @@ const updateBaseCSS = () => {
         return ''
       })()
       if (content.includes('@tailwind')) {
-        console.log(Text.green('css file not changed(already exists @tailwind config).'))
+        console.log(
+          Text.green('css file not changed(already exists @tailwind config).')
+        )
         return resolve()
       }
 
