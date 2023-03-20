@@ -3,13 +3,13 @@ import { spawn } from 'child_process'
 import ConfigParser from '../../../../lib/ConfigParser'
 import Json2Config from '../../../../lib/JSON2Config'
 import Text from '../../../../lib/Text'
-import { requestYesOrNo } from '../../../../utils'
+import { requestPackageManager, requestYesOrNo } from '../../../../utils'
 
 export const installTailwindDependencies = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('tailwindcss postcss autoprefixer')
 
-  if (!(await requestYesOrNo('Would you like to install them now with npm?'))) {
+  if (!(await requestYesOrNo('Would you like to install them now?'))) {
     console.log(
       `${Text.yellow(
         '[WARNING]'
@@ -18,15 +18,14 @@ export const installTailwindDependencies = async () => {
     return
   }
 
+  const { packageManager, args } = await requestPackageManager()
+  args.push('tailwindcss', 'postcss', 'autoprefixer')
+
   return new Promise((resolve, reject) => {
-    const shell = spawn(
-      'npm',
-      ['i', '-D', 'tailwindcss', 'postcss', 'autoprefixer'],
-      {
-        stdio: 'inherit',
-        shell: true,
-      }
-    )
+    const shell = spawn(packageManager, args, {
+      stdio: 'inherit',
+      shell: true,
+    })
 
     shell.on('close', (code) => {
       if (code !== 0) {

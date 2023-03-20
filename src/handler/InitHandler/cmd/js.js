@@ -3,7 +3,7 @@ const Text = require('../../../lib/Text')
 const fs = require('fs')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
-const { requestYesOrNo } = require('../../../utils')
+const { requestYesOrNo, requestPackageManager } = require('../../../utils')
 
 const initEslint = () => {
   console.log(Text.green('Start eslint init...'))
@@ -30,7 +30,7 @@ const initPrettier = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('prettier eslint-plugin-prettier eslint-config-prettier')
 
-  if (!(await requestYesOrNo('Would you like to install them now with npm?'))) {
+  if (!(await requestYesOrNo('Would you like to install them now?'))) {
     console.log(
       `${Text.yellow(
         '[WARNING]'
@@ -39,21 +39,14 @@ const initPrettier = async () => {
     return
   }
 
+  const { packageManager, args } = await requestPackageManager()
+  args.push('prettier', 'eslint-plugin-prettier', 'eslint-config-prettier')
+
   return new Promise((resolve, reject) => {
-    const shell = spawn(
-      'npm',
-      [
-        'i',
-        '-D',
-        'prettier',
-        'eslint-plugin-prettier',
-        'eslint-config-prettier',
-      ],
-      {
-        stdio: 'inherit',
-        shell: true,
-      }
-    )
+    const shell = spawn(packageManager, args, {
+      stdio: 'inherit',
+      shell: true,
+    })
 
     shell.on('close', (code) => {
       if (code !== 0) {
@@ -74,7 +67,7 @@ const initBabelEslintParser = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('@babel/eslint-parser')
 
-  if (!(await requestYesOrNo('Would you like to install them now with npm?'))) {
+  if (!(await requestYesOrNo('Would you like to install them now?'))) {
     console.log(
       `${Text.yellow(
         '[WARNING]'
@@ -83,8 +76,11 @@ const initBabelEslintParser = async () => {
     return
   }
 
+  const { packageManager, args } = await requestPackageManager()
+  args.push('@babel/eslint-parser')
+
   return new Promise((resolve, reject) => {
-    const shell = spawn('npm', ['i', '-D', '@babel/eslint-parser'], {
+    const shell = spawn(packageManager, args, {
       stdio: 'inherit',
       shell: true,
     })

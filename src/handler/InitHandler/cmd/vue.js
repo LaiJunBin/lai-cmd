@@ -3,7 +3,7 @@ const Text = require('../../../lib/Text')
 const fs = require('fs')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
-const { requestYesOrNo } = require('../../../utils')
+const { requestYesOrNo, requestPackageManager } = require('../../../utils')
 const InitVueTailwindCSS = require('./vue-tailwindcss')
 
 const initEslint = () => {
@@ -31,7 +31,7 @@ const initPrettier = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('prettier eslint-plugin-prettier eslint-config-prettier')
 
-  if (!(await requestYesOrNo('Would you like to install them now with npm?'))) {
+  if (!(await requestYesOrNo('Would you like to install them now?'))) {
     console.log(
       `${Text.yellow(
         '[WARNING]'
@@ -40,21 +40,14 @@ const initPrettier = async () => {
     return
   }
 
+  const { packageManager, args } = await requestPackageManager()
+  args.push('prettier', 'eslint-plugin-prettier', 'eslint-config-prettier')
+
   return new Promise((resolve, reject) => {
-    const shell = spawn(
-      'npm',
-      [
-        'i',
-        '-D',
-        'prettier',
-        'eslint-plugin-prettier',
-        'eslint-config-prettier',
-      ],
-      {
-        stdio: 'inherit',
-        shell: true,
-      }
-    )
+    const shell = spawn(packageManager, args, {
+      stdio: 'inherit',
+      shell: true,
+    })
 
     shell.on('close', (code) => {
       if (code !== 0) {
@@ -70,7 +63,6 @@ const initPrettier = async () => {
     })
   })
 }
-
 
 const updateEslintConfigForVue3 = async () => {
   console.log(Text.green('update eslint config for vue3 recommended'))
@@ -92,7 +84,7 @@ const updateEslintConfigForVue3 = async () => {
       const config = ConfigParser.parse(configFile)
 
       config.extends[0] = 'plugin:vue/vue3-recommended'
-      
+
       Json2Config.write(configFile, config)
       console.log(Text.green('update eslint config OK...'))
       resolve()
@@ -211,7 +203,8 @@ const InitVue = () => {
             .then(generatePrettierConfig)
             .then(updateEslintConfigForPrettier)
       )
-    ).then(() =>
+    )
+    .then(() =>
       requestYesOrNo(
         'Do you want to initialize tailwindcss with lai-cmd?'
       ).then((res) => res && InitVueTailwindCSS())

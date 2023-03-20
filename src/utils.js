@@ -1,3 +1,5 @@
+import prompts from 'prompts'
+
 const promptly = require('promptly')
 
 export const requestYesOrNo = async (message, defaultYes = true) => {
@@ -8,4 +10,28 @@ export const requestYesOrNo = async (message, defaultYes = true) => {
       })
     ).toLowerCase() !== 'n'
   )
+}
+
+export const requestPackageManager = async () => {
+  const result = await prompts({
+    type: 'select',
+    name: 'packageManager',
+    message: 'Select a package manager',
+    choices: [
+      { title: 'npm', value: 'npm' },
+      { title: 'yarn', value: 'yarn' },
+      { title: 'pnpm', value: 'pnpm' },
+    ],
+    initial: 0,
+  })
+
+  const { packageManager } = result
+  const args = []
+  if (packageManager === 'npm') {
+    args.push('i', '-D')
+  } else {
+    args.push('add', '-D')
+  }
+
+  return { packageManager, args }
 }

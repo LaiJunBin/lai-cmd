@@ -3,7 +3,7 @@ const Text = require('../../../lib/Text')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const fs = require('fs')
-const { requestYesOrNo } = require('../../../utils')
+const { requestYesOrNo, requestPackageManager } = require('../../../utils')
 
 const runInitJs = () => {
   return new Promise((resolve, reject) => {
@@ -49,7 +49,7 @@ const initBabelPresetReact = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('@babel/eslint-parser')
 
-  if (!(await requestYesOrNo('Would you like to install them now with npm?'))) {
+  if (!(await requestYesOrNo('Would you like to install them now?'))) {
     console.log(
       `${Text.yellow(
         '[WARNING]'
@@ -58,8 +58,11 @@ const initBabelPresetReact = async () => {
     return
   }
 
+  const { packageManager, args } = await requestPackageManager()
+  args.push('@babel/eslint-parser')
+
   return new Promise((resolve, reject) => {
-    const shell = spawn('npm', ['i', '-D', '@babel/preset-react'], {
+    const shell = spawn(packageManager, args, {
       stdio: 'inherit',
       shell: true,
     })
