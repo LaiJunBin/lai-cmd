@@ -4,27 +4,7 @@ const fs = require('fs')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const { requestYesOrNo, requestPackageManager } = require('../../../utils')
-
-const initEslint = () => {
-  console.log(Text.green('Start eslint init...'))
-
-  return new Promise((resolve, reject) => {
-    const shell = spawn('npx', ['eslint', '--init'], {
-      stdio: 'inherit',
-      shell: true,
-    })
-
-    shell.on('close', (code) => {
-      if (code !== 0) {
-        const error = `${Text.red('ERROR')}: [eslint] terminated code: ${code}`
-        console.log(error)
-        return reject(error)
-      }
-
-      resolve()
-    })
-  })
-}
+const { initEslint } = require('./utils/eslint')
 
 const initPrettier = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)

@@ -5,27 +5,7 @@ const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const { requestYesOrNo, requestPackageManager } = require('../../../utils')
 const InitVueTailwindCSS = require('./vue-tailwindcss')
-
-const initEslint = () => {
-  console.log(Text.green('Start eslint init...'))
-
-  return new Promise((resolve, reject) => {
-    const shell = spawn('npx', ['eslint', '--init'], {
-      stdio: 'inherit',
-      shell: true,
-    })
-
-    shell.on('close', (code) => {
-      if (code !== 0) {
-        const error = `${Text.red('ERROR')}: [eslint] terminated code: ${code}`
-        console.log(error)
-        return reject(error)
-      }
-
-      resolve()
-    })
-  })
-}
+const { initEslint } = require('./utils/eslint')
 
 const initPrettier = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
@@ -161,32 +141,6 @@ const updateEslintConfigForPrettier = () => {
     } catch (e) {
       console.log(e)
       return reject(e)
-    }
-  })
-}
-
-const generateJsConfig = () => {
-  console.log(Text.green('generate jsconfig for vscode...'))
-  const config = {
-    compilerOptions: {
-      checkJs: true,
-      baseUrl: './src',
-      target: 'ES2015',
-      moduleResolution: 'node',
-    },
-  }
-
-  return new Promise((resolve, reject) => {
-    try {
-      Json2Config.write('jsconfig.json', config)
-      console.log(Text.green('generate jsconfig OK...'))
-      resolve()
-    } catch (e) {
-      const error = `${Text.red(
-        'ERROR'
-      )}: [jsconfig] generate file error. \n${e}`
-      console.log(error)
-      return reject(error)
     }
   })
 }
