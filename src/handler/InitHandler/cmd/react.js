@@ -131,11 +131,55 @@ const updateEslintConfigForBabelPresetReact = async () => {
   })
 }
 
+const updateEslintConfigForExtendJsxRuntime = async () => {
+  console.log(
+    Text.green('update eslint config for extend plugin:react/jsx-runtime...')
+  )
+
+  return await new Promise((resolve, reject) => {
+    try {
+      const dirs = fs.readdirSync('./')
+      const configs = dirs.filter((dir) => /^\.eslintrc/.test(dir))
+
+      if (configs.length === 0) {
+        throw new Error(`can't find eslint config file.`)
+      }
+
+      if (configs.length > 1) {
+        throw new Error('Uncertain the eslint config file.')
+      }
+
+      const configFile = configs[0]
+      const config = ConfigParser.parse(configFile)
+
+      if (!config.extends) {
+        config.extends = []
+      }
+
+      if (!config.extends.includes('plugin:react/jsx-runtime')) {
+        config.extends.push('plugin:react/jsx-runtime')
+      }
+
+      Json2Config.write(configFile, config)
+      console.log(Text.green('update eslint config OK...'))
+      resolve()
+    } catch (e) {
+      console.log(e)
+      return reject(e)
+    }
+  })
+}
+
 const InitReact = () => {
   requestYesOrNo(
     'Do you want to initialize js(eslint + prettier + jsconfig) with lai-cmd? '
   )
     .then((res) => res && runInitJs())
+    .then(() =>
+      requestYesOrNo(
+        'Do you want to extend plugin:react/jsx-runtime to ESLint config?'
+      ).then((res) => res && updateEslintConfigForExtendJsxRuntime())
+    )
     .then(() =>
       requestYesOrNo('Do you want to initialize @babel/preset-react?').then(
         (res) =>
