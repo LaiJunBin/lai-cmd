@@ -4,25 +4,7 @@ const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const fs = require('fs')
 const { requestYesOrNo, requestPackageManager } = require('../../../utils')
-
-const runInitJs = () => {
-  return new Promise((resolve, reject) => {
-    const shell = spawn('npx', ['lai-cmd', 'init', 'js'], {
-      stdio: 'inherit',
-      shell: true,
-    })
-
-    shell.on('close', (code) => {
-      if (code !== 0) {
-        const error = `${Text.red('ERROR')}: [init js] terminated code: ${code}`
-        console.log(error)
-        return reject(error)
-      }
-
-      resolve()
-    })
-  })
-}
+const { runInitJs } = require('./utils')
 
 const runInitReactTailwindCSS = () => {
   return new Promise((resolve, reject) => {
