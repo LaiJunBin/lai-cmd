@@ -156,6 +156,10 @@ const updateEslintConfigForExtendJsxRuntime = async () => {
         config.extends = []
       }
 
+      if (typeof config.extends === 'string') {
+        config.extends = [config.extends]
+      }
+
       if (!config.extends.includes('plugin:react/jsx-runtime')) {
         config.extends.push('plugin:react/jsx-runtime')
       }

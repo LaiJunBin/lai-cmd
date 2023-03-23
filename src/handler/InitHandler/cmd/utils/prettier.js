@@ -90,6 +90,10 @@ export const updateEslintConfigForPrettier = () => {
       config.plugins = config.plugins || []
       config.rules = config.rules || {}
 
+      if (typeof config.extends === 'string') {
+        config.extends = [config.extends]
+      }
+
       if (!config.extends.includes('prettier')) {
         config.extends.push('prettier')
       }
