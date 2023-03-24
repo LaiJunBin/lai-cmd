@@ -3,8 +3,12 @@ const Text = require('../../../lib/Text')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const fs = require('fs')
-const { requestYesOrNo, requestPackageManager } = require('../../../utils')
-const { runInitJs } = require('./utils')
+const {
+  requestYesOrNo,
+  requestPackageManager,
+  handleWrapper,
+} = require('../../../utils')
+const { requestRunInitJs } = require('./utils')
 
 const runInitReactTailwindCSS = () => {
   return new Promise((resolve, reject) => {
@@ -156,33 +160,31 @@ const updateEslintConfigForExtendJsxRuntime = async () => {
   })
 }
 
-const InitReact = () => {
-  requestYesOrNo(
-    'Do you want to initialize js(eslint + prettier + jsconfig) with lai-cmd? '
+const requestAddReactJsxRuntimeToEslint = () => {
+  return requestYesOrNo(
+    'Do you want to extend plugin:react/jsx-runtime to ESLint config?'
+  ).then((res) => res && updateEslintConfigForExtendJsxRuntime())
+}
+
+const requestAddBabelPresetReactToEslint = () => {
+  return requestYesOrNo('Do you want to initialize @babel/preset-react?').then(
+    (res) =>
+      res && initBabelPresetReact().then(updateEslintConfigForBabelPresetReact)
   )
-    .then((res) => res && runInitJs())
-    .then(() =>
-      requestYesOrNo(
-        'Do you want to extend plugin:react/jsx-runtime to ESLint config?'
-      ).then((res) => res && updateEslintConfigForExtendJsxRuntime())
-    )
-    .then(() =>
-      requestYesOrNo('Do you want to initialize @babel/preset-react?').then(
-        (res) =>
-          res &&
-          initBabelPresetReact().then(updateEslintConfigForBabelPresetReact)
-      )
-    )
-    .then(() =>
-      requestYesOrNo(
-        'Do you want to initialize tailwindcss with lai-cmd?'
-      ).then((res) => res && runInitReactTailwindCSS())
-    )
-    .then(() => {
-      console.log(Text.green('All done.'))
-    })
-    .catch((err) => {
-      console.log(`${Text.red('[ERROR]')}: ${err}`)
-    })
+}
+
+const requestRunInitReactTailwindCSS = () => {
+  return requestYesOrNo(
+    'Do you want to initialize tailwindcss with lai-cmd?'
+  ).then((res) => res && runInitReactTailwindCSS())
+}
+
+const InitReact = () => {
+  return handleWrapper(
+    requestRunInitJs()
+      .then(requestAddReactJsxRuntimeToEslint)
+      .then(requestAddBabelPresetReactToEslint)
+      .then(requestRunInitReactTailwindCSS)
+  )
 }
 module.exports = InitReact

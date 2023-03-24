@@ -5,6 +5,7 @@ const {
   initTailwindConfig,
   updateTailwindConfig,
 } = require('./utils/tailwind')
+const { handleWrapper } = require('../../../utils')
 
 const updateBaseCSS = () => {
   console.log(Text.green('update css...'))
@@ -52,15 +53,11 @@ ${content}
 }
 
 const InitVueTailwindCSS = () => {
-  return installTailwindDependencies()
-    .then(initTailwindConfig)
-    .then(updateTailwindConfig)
-    .then(updateBaseCSS)
-    .then(() => {
-      console.log(Text.green('All done.'))
-    })
-    .catch((err) => {
-      console.log(`${Text.red('[ERROR]')}: ${err}`)
-    })
+  return handleWrapper(
+    installTailwindDependencies()
+      .then(initTailwindConfig)
+      .then(updateTailwindConfig)
+      .then(updateBaseCSS)
+  )
 }
 module.exports = InitVueTailwindCSS

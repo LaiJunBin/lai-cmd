@@ -76,7 +76,10 @@ export const updateTailwindConfig = () => {
       }
 
       const config = ConfigParser.parse(configFile)
-      const contents = ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}']
+      const contents = [
+        './index.html',
+        './src/**/*.{html,svelte,vue,js,ts,jsx,tsx}',
+      ]
 
       config.content = config.content || []
 

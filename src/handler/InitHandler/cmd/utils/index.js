@@ -1,7 +1,8 @@
 import Text from '../../../../lib/Text'
 import { spawn } from 'child_process'
+const { requestYesOrNo } = require('../../../../utils')
 
-export const runInitJs = () => {
+const runInitJs = () => {
   return new Promise((resolve, reject) => {
     const shell = spawn('npx', ['lai-cmd', 'init', 'js'], {
       stdio: 'inherit',
@@ -18,4 +19,10 @@ export const runInitJs = () => {
       resolve()
     })
   })
+}
+
+export const requestRunInitJs = () => {
+  return requestYesOrNo(
+    'Do you want to initialize js(eslint + prettier + jsconfig) with lai-cmd? '
+  ).then((res) => res && runInitJs())
 }

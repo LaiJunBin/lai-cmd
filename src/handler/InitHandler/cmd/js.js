@@ -1,15 +1,16 @@
-const { spawn } = require('child_process')
-const Text = require('../../../lib/Text')
 const fs = require('fs')
+const { spawn } = require('child_process')
+const { requestInitEslint } = require('./utils/eslint')
+const { requestInitPrettier } = require('./utils/prettier')
+const { requestInitJsConfig } = require('./utils/jsconfig')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
-const { requestYesOrNo, requestPackageManager } = require('../../../utils')
-const { initEslint } = require('./utils/eslint')
 const {
-  initPrettier,
-  generatePrettierConfig,
-  updateEslintConfigForPrettier,
-} = require('./utils/prettier')
+  requestYesOrNo,
+  requestPackageManager,
+  handleWrapper,
+} = require('../../../utils')
+const Text = require('../../../lib/Text')
 
 const initBabelEslintParser = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
@@ -83,61 +84,20 @@ const updateEslintConfigForBabelEslintParser = async () => {
   })
 }
 
-const generateJsConfig = () => {
-  console.log(Text.green('generate jsconfig for vscode...'))
-  const config = {
-    compilerOptions: {
-      checkJs: true,
-      baseUrl: './src',
-      target: 'ES2015',
-      moduleResolution: 'node',
-    },
-  }
-
-  return new Promise((resolve, reject) => {
-    try {
-      Json2Config.write('jsconfig.json', config)
-      console.log(Text.green('generate jsconfig OK...'))
-      resolve()
-    } catch (e) {
-      const error = `${Text.red(
-        'ERROR'
-      )}: [jsconfig] generate file error. \n${e}`
-      console.log(error)
-      return reject(error)
-    }
-  })
+const requestAddBabelParserToEslint = () => {
+  return requestYesOrNo('Do you want to use @babel/eslint-parser?').then(
+    (res) =>
+      res &&
+      initBabelEslintParser().then(updateEslintConfigForBabelEslintParser)
+  )
 }
 
 const InitJs = () => {
-  requestYesOrNo('Do you want to initialize eslint?')
-    .then((res) => res && initEslint())
-    .then(() =>
-      requestYesOrNo('Do you want to use @babel/eslint-parser?').then(
-        (res) =>
-          res &&
-          initBabelEslintParser().then(updateEslintConfigForBabelEslintParser)
-      )
-    )
-    .then(() =>
-      requestYesOrNo('Do you want to initialize prettier?').then(
-        (res) =>
-          res &&
-          initPrettier()
-            .then(generatePrettierConfig)
-            .then(updateEslintConfigForPrettier)
-      )
-    )
-    .then(() =>
-      requestYesOrNo('Do you want to initialize jsconfig?').then(
-        (res) => res && generateJsConfig()
-      )
-    )
-    .then(() => {
-      console.log(Text.green('All done.'))
-    })
-    .catch((err) => {
-      console.log(`${Text.red('[ERROR]')}: ${err}`)
-    })
+  return handleWrapper(
+    requestInitEslint()
+      .then(requestAddBabelParserToEslint)
+      .then(requestInitPrettier)
+      .then(requestInitJsConfig)
+  )
 }
 module.exports = InitJs

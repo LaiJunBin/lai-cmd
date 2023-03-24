@@ -1,6 +1,17 @@
+import Text from './lib/Text'
 import prompts from 'prompts'
 
 const promptly = require('promptly')
+
+export const handleWrapper = (fn) => {
+  return fn
+    .then(() => {
+      console.log(Text.green('All done.'))
+    })
+    .catch((err) => {
+      console.log(`${Text.red('[ERROR]')}: ${err}`)
+    })
+}
 
 export const requestYesOrNo = async (message, defaultYes = true) => {
   return (

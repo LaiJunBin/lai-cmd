@@ -5,6 +5,16 @@ import Json2Config from '../../../../lib/JSON2Config'
 import { requestPackageManager, requestYesOrNo } from '../../../../utils'
 import { spawn } from 'child_process'
 
+export const requestInitPrettier = () => {
+  return requestYesOrNo('Do you want to initialize prettier?').then(
+    (res) =>
+      res &&
+      initPrettier()
+        .then(generatePrettierConfig)
+        .then(updateEslintConfigForPrettier)
+  )
+}
+
 export const initPrettier = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
   console.log('prettier eslint-plugin-prettier eslint-config-prettier')

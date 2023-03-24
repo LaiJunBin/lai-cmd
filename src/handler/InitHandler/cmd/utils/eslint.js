@@ -61,6 +61,12 @@ const updateTypescriptEslintConfig = async (configPath) => {
   })
 }
 
+export const requestInitEslint = () => {
+  return requestYesOrNo('Do you want to initialize eslint?').then(
+    (res) => res && initEslint()
+  )
+}
+
 export const initEslint = async () => {
   try {
     await runInitEslint()
