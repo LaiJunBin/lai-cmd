@@ -19,3 +19,5 @@ react-tailwindcss    | 在 react 專案 安裝和設定 tailwindcss |
 react    | 執行 init js 與 init react-tailwindcss 並設定 @babel/preset-react |
 vue-tailwindcss    | 在 vue 專案 安裝和設定 tailwindcss |
 vue    | 初始化 eslint, prettier 與 init vue-tailwindcss |
+svelte-tailwindcss    | 在 svelte 專案 安裝和設定 tailwindcss |
+svelte    | 初始化 eslint, prettier, tailwindcss 與建立簡單的 vscode settings |

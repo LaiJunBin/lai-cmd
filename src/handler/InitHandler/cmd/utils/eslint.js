@@ -65,27 +65,28 @@ const updateTypescriptEslintConfig = async (configPath) => {
   })
 }
 
-export const requestInitEslint = (callbacks) => {
+export const requestInitEslint = (callbacks = []) => {
   return requestYesOrNo('Do you want to initialize eslint?').then(
     (res) => res && initEslint().then(() => runAsyncCallbacks(callbacks))
   )
 }
 
-export const initEslint = async () => {
-  try {
-    await runInitEslint()
-    const res = await requestYesOrNo('Would you like to use typescript?')
-    const result = await prompts({
-      type: 'text',
-      name: 'configPath',
-      message: 'Please input tsconfig.json path',
-      initial: './tsconfig.json',
-    })
-
-    if (res) {
-      return updateTypescriptEslintConfig(result.configPath)
+const requestUpdateTypescriptEslintConfig = () => {
+  return requestYesOrNo('Would you like to use typescript?').then(
+    async (res) => {
+      if (res) {
+        const result = await prompts({
+          type: 'text',
+          name: 'configPath',
+          message: 'Please input tsconfig.json path',
+          initial: './tsconfig.json',
+        })
+        return updateTypescriptEslintConfig(result.configPath)
+      }
     }
-  } catch (e) {
-    return e
-  }
+  )
+}
+
+export const initEslint = () => {
+  return runInitEslint().then(requestUpdateTypescriptEslintConfig)
 }

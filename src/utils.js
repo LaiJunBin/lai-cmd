@@ -1,5 +1,6 @@
 import Text from './lib/Text'
 import prompts from 'prompts'
+import ConfigParser from './lib/ConfigParser'
 
 const promptly = require('promptly')
 
@@ -55,4 +56,12 @@ export const requestPackageManager = async () => {
   }
 
   return { packageManager, args }
+}
+
+export const checkModuleInstalled = (moduleName) => {
+  const config = ConfigParser.parse('package.json')
+  return (
+    (config.dependencies?.[moduleName] ||
+      config.devDependencies?.[moduleName]) !== undefined
+  )
 }
