@@ -9,27 +9,7 @@ const {
   handleWrapper,
 } = require('../../../utils')
 const { requestRunInitJs } = require('./utils')
-
-const runInitReactTailwindCSS = () => {
-  return new Promise((resolve, reject) => {
-    const shell = spawn('npx', ['lai-cmd', 'init', 'react-tailwindcss'], {
-      stdio: 'inherit',
-      shell: true,
-    })
-
-    shell.on('close', (code) => {
-      if (code !== 0) {
-        const error = `${Text.red(
-          'ERROR'
-        )}: [init react tailwindcss] terminated code: ${code}`
-        console.log(error)
-        return reject(error)
-      }
-
-      resolve()
-    })
-  })
-}
+const InitReactTailwindCSS = require('./react-tailwindcss')
 
 const initBabelPresetReact = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
@@ -174,9 +154,9 @@ const requestAddBabelPresetReactToEslint = () => {
 }
 
 const requestRunInitReactTailwindCSS = () => {
-  return requestYesOrNo(
-    'Do you want to initialize tailwindcss with lai-cmd?'
-  ).then((res) => res && runInitReactTailwindCSS())
+  return requestYesOrNo('Do you want to initialize tailwindcss?').then(
+    (res) => res && InitReactTailwindCSS()
+  )
 }
 
 const InitReact = () => {
