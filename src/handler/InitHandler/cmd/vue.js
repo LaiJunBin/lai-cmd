@@ -39,15 +39,14 @@ const updateEslintConfigForVue3 = async () => {
 }
 
 const requestRunInitVueTailwindCSS = () => {
-  return requestYesOrNo(
-    'Do you want to initialize tailwindcss with lai-cmd?'
-  ).then((res) => res && InitVueTailwindCSS())
+  return requestYesOrNo('Do you want to initialize tailwindcss?').then(
+    (res) => res && InitVueTailwindCSS()
+  )
 }
 
 const InitVue = () => {
   handleWrapper(
-    requestInitEslint()
-      .then(updateEslintConfigForVue3)
+    requestInitEslint(updateEslintConfigForVue3)
       .then(requestInitPrettier)
       .then(requestRunInitVueTailwindCSS)
   )

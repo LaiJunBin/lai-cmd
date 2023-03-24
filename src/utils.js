@@ -13,6 +13,16 @@ export const handleWrapper = (fn) => {
     })
 }
 
+export const runAsyncCallbacks = async (callbacks) => {
+  if (!Array.isArray(callbacks)) {
+    callbacks = [callbacks]
+  }
+
+  for (const callback of callbacks) {
+    await callback()
+  }
+}
+
 export const requestYesOrNo = async (message, defaultYes = true) => {
   return (
     (

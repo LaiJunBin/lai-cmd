@@ -1,6 +1,10 @@
 import Text from '../../../../lib/Text'
 import { spawn } from 'child_process'
-import { requestPackageManager, requestYesOrNo } from '../../../../utils'
+import {
+  requestPackageManager,
+  requestYesOrNo,
+  runAsyncCallbacks,
+} from '../../../../utils'
 import fs from 'fs'
 import ConfigParser from '../../../../lib/ConfigParser'
 import Json2Config from '../../../../lib/JSON2Config'
@@ -61,9 +65,9 @@ const updateTypescriptEslintConfig = async (configPath) => {
   })
 }
 
-export const requestInitEslint = () => {
+export const requestInitEslint = (callbacks) => {
   return requestYesOrNo('Do you want to initialize eslint?').then(
-    (res) => res && initEslint()
+    (res) => res && initEslint().then(() => runAsyncCallbacks(callbacks))
   )
 }
 
