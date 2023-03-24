@@ -13,7 +13,7 @@ export const handleWrapper = (fn) => {
     })
 }
 
-export const runAsyncCallbacks = async (callbacks) => {
+export const runAsyncCallbacks = async (callbacks = []) => {
   if (!Array.isArray(callbacks)) {
     callbacks = [callbacks]
   }
