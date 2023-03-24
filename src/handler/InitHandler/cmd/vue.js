@@ -2,7 +2,7 @@ const Text = require('../../../lib/Text')
 const fs = require('fs')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
-const { requestYesOrNo, handleWrapper } = require('../../../utils')
+const { requestYesOrNo } = require('../../../utils')
 const InitVueTailwindCSS = require('./vue-tailwindcss')
 const { requestInitEslint } = require('./utils/eslint')
 const { requestInitPrettier } = require('./utils/prettier')
@@ -45,10 +45,8 @@ const requestRunInitVueTailwindCSS = () => {
 }
 
 const InitVue = () => {
-  handleWrapper(
-    requestInitEslint(updateEslintConfigForVue3)
-      .then(requestInitPrettier)
-      .then(requestRunInitVueTailwindCSS)
-  )
+  return requestInitEslint([updateEslintConfigForVue3])
+    .then(requestInitPrettier)
+    .then(requestRunInitVueTailwindCSS)
 }
 module.exports = InitVue

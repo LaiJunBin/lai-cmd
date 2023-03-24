@@ -1,18 +1,6 @@
-import Text from './lib/Text'
 import prompts from 'prompts'
 import ConfigParser from './lib/ConfigParser'
-
-const promptly = require('promptly')
-
-export const handleWrapper = (fn) => {
-  return fn
-    .then(() => {
-      console.log(Text.green('All done.'))
-    })
-    .catch((err) => {
-      console.log(`${Text.red('[ERROR]')}: ${err}`)
-    })
-}
+import promptly from 'promptly'
 
 export const runAsyncCallbacks = async (callbacks = []) => {
   if (!Array.isArray(callbacks)) {

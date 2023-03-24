@@ -1,3 +1,5 @@
+const Text = require('../lib/Text')
+
 class Handler {
   static payloads = {}
   constructor(source, options, command) {
@@ -10,6 +12,12 @@ class Handler {
     const handler = Handler.payloads[this.constructor.name][this.source]
     if (handler instanceof Function) {
       handler(this.options, this.command)
+        .then(() => {
+          console.log(Text.green('All done.'))
+        })
+        .catch((err) => {
+          console.log(`${Text.red('[ERROR]')}: ${err}`)
+        })
     } else {
       this.fallback()
     }

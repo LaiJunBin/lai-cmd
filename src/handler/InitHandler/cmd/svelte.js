@@ -2,7 +2,6 @@ const { spawn } = require('child_process')
 const Text = require('../../../lib/Text')
 const {
   requestYesOrNo,
-  handleWrapper,
   requestPackageManager,
   checkModuleInstalled,
 } = require('../../../utils')
@@ -11,31 +10,11 @@ const { requestInitPrettier } = require('./utils/prettier')
 const fs = require('fs')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
-
-const runInitSvelteTailwindCSS = () => {
-  return new Promise((resolve, reject) => {
-    const shell = spawn('npx', ['lai-cmd', 'init', 'svelte-tailwindcss'], {
-      stdio: 'inherit',
-      shell: true,
-    })
-
-    shell.on('close', (code) => {
-      if (code !== 0) {
-        const error = `${Text.red(
-          'ERROR'
-        )}: [init svelte tailwindcss] terminated code: ${code}`
-        console.log(error)
-        return reject(error)
-      }
-
-      resolve()
-    })
-  })
-}
+const InitSvelteTailwindCSS = require('./svelte-tailwindcss')
 
 const requestInitSvelteTailwindCSS = () => {
   return requestYesOrNo('Do you want to initialize tailwindcss?').then(
-    (res) => res && runInitSvelteTailwindCSS()
+    (res) => res && InitSvelteTailwindCSS()
   )
 }
 
@@ -218,12 +197,10 @@ const requestChangeSvelte3ToSvelte = () => {
 }
 
 const InitSvelte = () => {
-  handleWrapper(
-    requestInitEslint()
-      .then(requestChangeSvelte3ToSvelte)
-      .then(requestInitPrettier)
-      .then(requestInitSvelteTailwindCSS)
-      .then(requestGenerateVscodeSettings)
-  )
+  return requestInitEslint()
+    .then(requestChangeSvelte3ToSvelte)
+    .then(requestInitPrettier)
+    .then(requestInitSvelteTailwindCSS)
+    .then(requestGenerateVscodeSettings)
 }
 module.exports = InitSvelte

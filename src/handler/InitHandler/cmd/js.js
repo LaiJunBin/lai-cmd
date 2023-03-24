@@ -5,11 +5,7 @@ const { requestInitPrettier } = require('./utils/prettier')
 const { requestInitJsConfig } = require('./utils/jsconfig')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
-const {
-  requestYesOrNo,
-  requestPackageManager,
-  handleWrapper,
-} = require('../../../utils')
+const { requestYesOrNo, requestPackageManager } = require('../../../utils')
 const Text = require('../../../lib/Text')
 
 const initBabelEslintParser = async () => {
@@ -93,11 +89,9 @@ const requestAddBabelParserToEslint = () => {
 }
 
 const InitJs = () => {
-  return handleWrapper(
-    requestInitEslint()
-      .then(requestAddBabelParserToEslint)
-      .then(requestInitPrettier)
-      .then(requestInitJsConfig)
-  )
+  return requestInitEslint()
+    .then(requestAddBabelParserToEslint)
+    .then(requestInitPrettier)
+    .then(requestInitJsConfig)
 }
 module.exports = InitJs

@@ -3,11 +3,7 @@ const Text = require('../../../lib/Text')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const fs = require('fs')
-const {
-  requestYesOrNo,
-  requestPackageManager,
-  handleWrapper,
-} = require('../../../utils')
+const { requestYesOrNo, requestPackageManager } = require('../../../utils')
 const { requestRunInitJs } = require('./utils')
 const InitReactTailwindCSS = require('./react-tailwindcss')
 
@@ -160,11 +156,9 @@ const requestRunInitReactTailwindCSS = () => {
 }
 
 const InitReact = () => {
-  return handleWrapper(
-    requestRunInitJs()
-      .then(requestAddReactJsxRuntimeToEslint)
-      .then(requestAddBabelPresetReactToEslint)
-      .then(requestRunInitReactTailwindCSS)
-  )
+  return requestRunInitJs()
+    .then(requestAddReactJsxRuntimeToEslint)
+    .then(requestAddBabelPresetReactToEslint)
+    .then(requestRunInitReactTailwindCSS)
 }
 module.exports = InitReact

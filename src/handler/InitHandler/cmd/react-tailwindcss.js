@@ -5,7 +5,6 @@ const {
   initTailwindConfig,
   updateTailwindConfig,
 } = require('./utils/tailwind')
-const { handleWrapper } = require('../../../utils')
 
 const updateIndexCSS = () => {
   console.log(Text.green('update index.css...'))
@@ -32,11 +31,9 @@ ${fs.readFileSync(file).toString()}
 }
 
 const InitReactTailwindCSS = () => {
-  return handleWrapper(
-    installTailwindDependencies()
-      .then(initTailwindConfig)
-      .then(updateTailwindConfig)
-      .then(updateIndexCSS)
-  )
+  return installTailwindDependencies()
+    .then(initTailwindConfig)
+    .then(updateTailwindConfig)
+    .then(updateIndexCSS)
 }
 module.exports = InitReactTailwindCSS

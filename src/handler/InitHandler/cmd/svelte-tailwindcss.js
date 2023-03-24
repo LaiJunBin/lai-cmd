@@ -6,7 +6,6 @@ const {
   updateTailwindConfig,
 } = require('./utils/tailwind')
 const prompts = require('prompts')
-const { handleWrapper } = require('../../../utils')
 
 const updateIndexCSS = async () => {
   const defaultCssPath = './src/index.css'
@@ -49,11 +48,9 @@ ${fs.readFileSync(file).toString()}
 }
 
 const InitSvelteTailwindCSS = () => {
-  handleWrapper(
-    installTailwindDependencies()
-      .then(initTailwindConfig)
-      .then(updateTailwindConfig)
-      .then(updateIndexCSS)
-  )
+  return installTailwindDependencies()
+    .then(initTailwindConfig)
+    .then(updateTailwindConfig)
+    .then(updateIndexCSS)
 }
 module.exports = InitSvelteTailwindCSS
