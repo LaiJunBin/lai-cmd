@@ -3,6 +3,9 @@ const { program } = require('commander')
 const InitHandler = require('./handler/InitHandler')
 
 const run = () => {
+  // @ts-ignore
+  program.version(require('../package.json').version)
+
   program
     .command('init')
     .description('init source')
