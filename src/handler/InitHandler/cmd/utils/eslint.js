@@ -116,7 +116,8 @@ const uninstallStandardTypescriptPlugin = (packageManager) => {
 }
 
 const installTypescriptRecommendedPlugin = (packageManager) => {
-  const packageName = '@typescript-eslint/eslint-plugin'
+  const packageName =
+    '@typescript-eslint/eslint-plugin @typescript-eslint/parser'
   const operator = packageManager === 'yarn' ? 'add' : 'install'
   return new Promise((resolve, reject) => {
     const shell = spawn(packageManager, [operator, '-D', packageName], {
