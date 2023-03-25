@@ -4,6 +4,7 @@ import ConfigParser from '../../../../lib/ConfigParser'
 import Json2Config from '../../../../lib/JSON2Config'
 import Text from '../../../../lib/Text'
 import { requestPackageManager, requestYesOrNo } from '../../../../utils'
+import { requestAddRecommendationExtensionToVsCodeConfig } from '.'
 
 export const installTailwindDependencies = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
@@ -97,4 +98,10 @@ export const updateTailwindConfig = () => {
       return reject(e)
     }
   })
+}
+
+export const requestAddTailwindRecommendationExtensions = async () => {
+  return requestAddRecommendationExtensionToVsCodeConfig([
+    'bradlc.vscode-tailwindcss',
+  ])
 }

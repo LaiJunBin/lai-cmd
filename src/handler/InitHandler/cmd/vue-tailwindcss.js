@@ -4,6 +4,7 @@ const {
   installTailwindDependencies,
   initTailwindConfig,
   updateTailwindConfig,
+  requestAddTailwindRecommendationExtensions,
 } = require('./utils/tailwind')
 
 const updateBaseCSS = () => {
@@ -56,5 +57,6 @@ const InitVueTailwindCSS = () => {
     .then(initTailwindConfig)
     .then(updateTailwindConfig)
     .then(updateBaseCSS)
+    .then(requestAddTailwindRecommendationExtensions)
 }
 module.exports = InitVueTailwindCSS

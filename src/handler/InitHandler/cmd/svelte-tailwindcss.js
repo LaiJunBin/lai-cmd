@@ -4,6 +4,7 @@ const {
   installTailwindDependencies,
   initTailwindConfig,
   updateTailwindConfig,
+  requestAddTailwindRecommendationExtensions,
 } = require('./utils/tailwind')
 const prompts = require('prompts')
 
@@ -52,5 +53,6 @@ const InitSvelteTailwindCSS = () => {
     .then(initTailwindConfig)
     .then(updateTailwindConfig)
     .then(updateIndexCSS)
+    .then(requestAddTailwindRecommendationExtensions)
 }
 module.exports = InitSvelteTailwindCSS

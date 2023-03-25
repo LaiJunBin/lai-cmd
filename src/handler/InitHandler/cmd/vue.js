@@ -6,6 +6,7 @@ const { requestYesOrNo } = require('../../../utils')
 const InitVueTailwindCSS = require('./vue-tailwindcss')
 const { requestInitEslint } = require('./utils/eslint')
 const { requestInitPrettier } = require('./utils/prettier')
+const { requestAddRecommendationExtensionToVsCodeConfig } = require('./utils')
 
 const updateEslintConfigForVue3 = async () => {
   console.log(Text.green('update eslint config for vue3 recommended'))
@@ -48,5 +49,11 @@ const InitVue = () => {
   return requestInitEslint([updateEslintConfigForVue3])
     .then(requestInitPrettier)
     .then(requestRunInitVueTailwindCSS)
+    .then(() =>
+      requestAddRecommendationExtensionToVsCodeConfig([
+        'Vue.volar',
+        'Vue.vscode-typescript-vue-plugin',
+      ])
+    )
 }
 module.exports = InitVue

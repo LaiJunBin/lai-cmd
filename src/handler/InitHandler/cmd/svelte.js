@@ -11,6 +11,7 @@ const fs = require('fs')
 const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const InitSvelteTailwindCSS = require('./svelte-tailwindcss')
+const { requestAddRecommendationExtensionToVsCodeConfig } = require('./utils')
 
 const requestInitSvelteTailwindCSS = () => {
   return requestYesOrNo('Do you want to initialize tailwindcss?').then(
@@ -52,7 +53,7 @@ const installSveltePlugin = async (packageManager) => {
   const packageName = 'eslint-plugin-svelte prettier-plugin-svelte'
   const operator = packageManager === 'yarn' ? 'add' : 'install'
   return new Promise((resolve, reject) => {
-    const shell = spawn(packageManager, [operator, packageName], {
+    const shell = spawn(packageManager, [operator, '-D', packageName], {
       stdio: 'inherit',
       shell: true,
     })
@@ -205,5 +206,8 @@ const InitSvelte = () => {
     .then(requestInitPrettier)
     .then(requestInitSvelteTailwindCSS)
     .then(requestGenerateVscodeSettings)
+    .then(() =>
+      requestAddRecommendationExtensionToVsCodeConfig(['svelte.svelte-vscode'])
+    )
 }
 module.exports = InitSvelte

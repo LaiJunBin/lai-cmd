@@ -9,6 +9,7 @@ import fs from 'fs'
 import ConfigParser from '../../../../lib/ConfigParser'
 import Json2Config from '../../../../lib/JSON2Config'
 import prompts from 'prompts'
+import { requestAddRecommendationExtensionToVsCodeConfig } from '.'
 
 const runInitEslint = async () => {
   console.log(Text.green('Start eslint init...'))
@@ -67,7 +68,15 @@ const updateTypescriptEslintConfig = async (configPath) => {
 
 export const requestInitEslint = (callbacks = []) => {
   return requestYesOrNo('Do you want to initialize eslint?').then(
-    (res) => res && initEslint().then(() => runAsyncCallbacks(callbacks))
+    (res) =>
+      res &&
+      initEslint()
+        .then(() => runAsyncCallbacks(callbacks))
+        .then(() =>
+          requestAddRecommendationExtensionToVsCodeConfig([
+            'dbaeumer.vscode-eslint',
+          ])
+        )
   )
 }
 
