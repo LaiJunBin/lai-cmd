@@ -50,7 +50,8 @@ const uninstallSvelte3Plugin = async (packageManager) => {
 }
 
 const installSveltePlugin = async (packageManager) => {
-  const packageName = 'eslint-plugin-svelte prettier-plugin-svelte'
+  const packageName =
+    'eslint-plugin-svelte prettier-plugin-svelte @typescript-eslint/parser'
   const operator = packageManager === 'yarn' ? 'add' : 'install'
   return new Promise((resolve, reject) => {
     const shell = spawn(packageManager, [operator, '-D', packageName], {
