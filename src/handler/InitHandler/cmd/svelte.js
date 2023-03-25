@@ -150,6 +150,9 @@ const runGenerateVscodeSettings = () => {
   const file = `${directory}/settings.json`
   const content = {
     'svelte.enable-ts-plugin': true,
+    'editor.codeActionsOnSave': {
+      'source.fixAll.eslint': true,
+    },
     'eslint.validate': ['svelte'],
   }
 
