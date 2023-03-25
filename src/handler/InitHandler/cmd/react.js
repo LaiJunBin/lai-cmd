@@ -4,8 +4,8 @@ const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const fs = require('fs')
 const { requestYesOrNo, requestPackageManager } = require('../../../utils')
-const { requestRunInitJs } = require('./utils')
 const InitReactTailwindCSS = require('./react-tailwindcss')
+const InitJs = require('./js')
 
 const initBabelPresetReact = async () => {
   console.log(`The ${Text.green('requires')} the following dependencies: `)
@@ -153,6 +153,16 @@ const requestRunInitReactTailwindCSS = () => {
   return requestYesOrNo('Do you want to initialize tailwindcss?').then(
     (res) => res && InitReactTailwindCSS()
   )
+}
+
+const requestRunInitJs = () => {
+  return requestYesOrNo(
+    'Do you want to initialize js(eslint + prettier + jsconfig)?'
+  ).then((res) => {
+    if (res) {
+      return InitJs()
+    }
+  })
 }
 
 const InitReact = () => {
