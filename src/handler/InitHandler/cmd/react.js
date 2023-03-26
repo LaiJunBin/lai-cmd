@@ -61,30 +61,49 @@ const updateEslintConfigForBabelPresetReact = async () => {
       }
 
       const configFile = configs[0]
-      const config = ConfigParser.parse(configFile)
+      try {
+        const config = ConfigParser.parse(configFile)
 
-      if (!config.parserOptions) {
-        config.parserOptions = {}
-      }
+        if (!config.parserOptions) {
+          config.parserOptions = {}
+        }
 
-      if (!config.parserOptions.babelOptions) {
-        config.parserOptions.babelOptions = {}
-      }
+        if (!config.parserOptions.babelOptions) {
+          config.parserOptions.babelOptions = {}
+        }
 
-      if (!config.parserOptions.babelOptions.presets) {
-        config.parserOptions.babelOptions.presets = []
-      }
+        if (!config.parserOptions.babelOptions.presets) {
+          config.parserOptions.babelOptions.presets = []
+        }
 
-      if (
-        !config.parserOptions.babelOptions.presets.includes(
-          '@babel/preset-react'
+        if (
+          !config.parserOptions.babelOptions.presets.includes(
+            '@babel/preset-react'
+          )
+        ) {
+          config.parserOptions.babelOptions.presets.push('@babel/preset-react')
+        }
+
+        Json2Config.write(configFile, config)
+        console.log(Text.green('update eslint config OK...'))
+      } catch {
+        console.log(Text.red('update eslint config failed...'))
+        console.log(
+          Text.yellow(
+            'Please add the following configuration to the eslint config file manually.'
+          )
         )
-      ) {
-        config.parserOptions.babelOptions.presets.push('@babel/preset-react')
+        console.log(
+          Text.yellow(
+            `parserOptions: {
+  babelOptions: {
+    presets: ['@babel/preset-react']
+  }
+}`
+          )
+        )
       }
 
-      Json2Config.write(configFile, config)
-      console.log(Text.green('update eslint config OK...'))
       resolve()
     } catch (e) {
       console.log(e)
@@ -112,22 +131,33 @@ const updateEslintConfigForExtendJsxRuntime = async () => {
       }
 
       const configFile = configs[0]
-      const config = ConfigParser.parse(configFile)
+      try {
+        const config = ConfigParser.parse(configFile)
 
-      if (!config.extends) {
-        config.extends = []
+        if (!config.extends) {
+          config.extends = []
+        }
+
+        if (typeof config.extends === 'string') {
+          config.extends = [config.extends]
+        }
+
+        if (!config.extends.includes('plugin:react/jsx-runtime')) {
+          config.extends.push('plugin:react/jsx-runtime')
+        }
+
+        Json2Config.write(configFile, config)
+        console.log(Text.green('update eslint config OK...'))
+      } catch {
+        console.log(Text.red('update eslint config failed...'))
+        console.log(
+          Text.yellow(
+            'Please add the following configuration to the eslint config file manually.'
+          )
+        )
+        console.log(Text.yellow(`extends: ['plugin:react/jsx-runtime']`))
       }
 
-      if (typeof config.extends === 'string') {
-        config.extends = [config.extends]
-      }
-
-      if (!config.extends.includes('plugin:react/jsx-runtime')) {
-        config.extends.push('plugin:react/jsx-runtime')
-      }
-
-      Json2Config.write(configFile, config)
-      console.log(Text.green('update eslint config OK...'))
       resolve()
     } catch (e) {
       console.log(e)

@@ -25,12 +25,22 @@ const updateEslintConfigForVue3 = async () => {
       }
 
       const configFile = configs[0]
-      const config = ConfigParser.parse(configFile)
+      try {
+        const config = ConfigParser.parse(configFile)
 
-      config.extends[0] = 'plugin:vue/vue3-recommended'
+        config.extends[0] = 'plugin:vue/vue3-recommended'
 
-      Json2Config.write(configFile, config)
-      console.log(Text.green('update eslint config OK...'))
+        Json2Config.write(configFile, config)
+        console.log(Text.green('update eslint config OK...'))
+      } catch {
+        console.log(Text.red('update eslint config failed...'))
+        console.log(
+          Text.yellow(
+            'Please add the following configuration to the eslint config file manually.'
+          )
+        )
+        console.log(Text.yellow(`extends: ['plugin:vue/vue3-recommended']`))
+      }
       resolve()
     } catch (e) {
       console.log(e)

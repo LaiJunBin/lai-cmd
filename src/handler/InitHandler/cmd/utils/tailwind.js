@@ -76,22 +76,38 @@ export const updateTailwindConfig = () => {
         configFile = 'tailwind.config.cjs'
       }
 
-      const config = ConfigParser.parse(configFile)
-      const contents = [
-        './index.html',
-        './src/**/*.{html,svelte,vue,js,ts,jsx,tsx}',
-      ]
+      try {
+        const config = ConfigParser.parse(configFile)
+        const contents = [
+          './index.html',
+          './src/**/*.{html,svelte,vue,js,ts,jsx,tsx}',
+        ]
 
-      config.content = config.content || []
+        config.content = config.content || []
 
-      for (const content of contents) {
-        if (!config.content.includes(content)) {
-          config.content.push(content)
+        for (const content of contents) {
+          if (!config.content.includes(content)) {
+            config.content.push(content)
+          }
         }
+
+        Json2Config.write(configFile, config)
+        console.log(Text.green('update tailwind config OK...'))
+      } catch {
+        console.log(Text.red('update tailwind config failed...'))
+        console.log(Text.yellow('please update it manually.'))
+        console.log(
+          Text.yellow('add the following content to tailwind.config.js:')
+        )
+        console.log(
+          Text.yellow(
+            `module.exports = {
+  content: ['./index.html', './src/**/*.{html,svelte,vue,js,ts,jsx,tsx}'],
+}`
+          )
+        )
       }
 
-      Json2Config.write(configFile, config)
-      console.log(Text.green('update tailwind config OK...'))
       resolve()
     } catch (e) {
       console.log(e)

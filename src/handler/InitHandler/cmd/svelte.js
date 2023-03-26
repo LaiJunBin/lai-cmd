@@ -90,54 +90,82 @@ const updateEslintConfig = async () => {
       }
 
       const configFile = configs[0]
-      const config = ConfigParser.parse(configFile)
+      try {
+        const config = ConfigParser.parse(configFile)
 
-      config.extends = config.extends || []
-      if (typeof config.extends === 'string') {
-        config.extends = [config.extends]
-      }
-      config.extends.push('plugin:svelte/recommended')
-
-      if (!config.plugins) {
-        config.plugins = []
-      }
-
-      const svelte3Index = config.plugins.indexOf('svelte3')
-      if (svelte3Index !== -1) {
-        config.plugins.splice(svelte3Index, 1)
-      }
-
-      if (!config.overrides) {
-        config.overrides = []
-      }
-
-      const overrideIndex = config.overrides.findIndex((o) =>
-        o.files.includes('*.svelte')
-      )
-      const override = config.overrides[overrideIndex]
-
-      if (override) {
-        if (override.processor === 'svelte3/svelte3') {
-          delete override.processor
+        config.extends = config.extends || []
+        if (typeof config.extends === 'string') {
+          config.extends = [config.extends]
         }
-        config.overrides[overrideIndex].parser = 'svelte-eslint-parser'
-        if (!config.overrides[overrideIndex].parserOptions) {
-          config.overrides[overrideIndex].parserOptions = {}
+        config.extends.push('plugin:svelte/recommended')
+
+        if (!config.plugins) {
+          config.plugins = []
         }
-        config.overrides[overrideIndex].parserOptions.parser =
-          '@typescript-eslint/parser'
-      } else {
-        config.overrides.push({
-          files: ['*.svelte'],
-          parser: 'svelte-eslint-parser',
-          parserOptions: {
-            parser: '@typescript-eslint/parser',
-          },
-        })
+
+        const svelte3Index = config.plugins.indexOf('svelte3')
+        if (svelte3Index !== -1) {
+          config.plugins.splice(svelte3Index, 1)
+        }
+
+        if (!config.overrides) {
+          config.overrides = []
+        }
+
+        const overrideIndex = config.overrides.findIndex((o) =>
+          o.files.includes('*.svelte')
+        )
+        const override = config.overrides[overrideIndex]
+
+        if (override) {
+          if (override.processor === 'svelte3/svelte3') {
+            delete override.processor
+          }
+          config.overrides[overrideIndex].parser = 'svelte-eslint-parser'
+          if (!config.overrides[overrideIndex].parserOptions) {
+            config.overrides[overrideIndex].parserOptions = {}
+          }
+          config.overrides[overrideIndex].parserOptions.parser =
+            '@typescript-eslint/parser'
+        } else {
+          config.overrides.push({
+            files: ['*.svelte'],
+            parser: 'svelte-eslint-parser',
+            parserOptions: {
+              parser: '@typescript-eslint/parser',
+            },
+          })
+        }
+
+        Json2Config.write(configFile, config)
+        console.log(Text.green('update eslint config OK...'))
+      } catch {
+        console.log(Text.red('Failed to update eslint config.'))
+        console.log(
+          Text.yellow(
+            'Please add the following configuration to the eslint config file manually.'
+          )
+        )
+        console.log(
+          Text.yellow(
+            `{
+  "extends": ["plugin:svelte/recommended"],  // <-- add
+  "plugins": ["svelte3"],  // <-- remove svelte3
+  "overrides": [
+    {
+      "files": ["*.svelte"],
+      "parser": "svelte-eslint-parser",
+      "parserOptions": {
+        "parser": "@typescript-eslint/parser"
+      }
+    }
+  ]
+}
+`
+          )
+        )
       }
 
-      Json2Config.write(configFile, config)
-      console.log(Text.green('update eslint config OK...'))
       resolve()
     } catch (e) {
       console.log(e)

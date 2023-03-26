@@ -51,14 +51,24 @@ const updateTypescriptEslintConfig = async (configPath) => {
       }
 
       const configFile = configs[0]
-      const config = ConfigParser.parse(configFile)
-      if (!config.parserOptions) {
-        config.parserOptions = {}
-      }
-      config.parserOptions.project = configPath
+      try {
+        const config = ConfigParser.parse(configFile)
+        if (!config.parserOptions) {
+          config.parserOptions = {}
+        }
+        config.parserOptions.project = configPath
 
-      Json2Config.write(configFile, config)
-      console.log(Text.green('update eslint config OK...'))
+        Json2Config.write(configFile, config)
+        console.log(Text.green('update eslint config OK...'))
+      } catch {
+        console.log(Text.red('update eslint config failed...'))
+        console.log(Text.yellow('please update it manually.'))
+        console.log(
+          Text.yellow(
+            `add "parserOptions.project: ${configPath}" to your eslint config file.`
+          )
+        )
+      }
       resolve()
     } catch (e) {
       console.log(e)
@@ -154,33 +164,48 @@ const tryToUpdateTypescriptExtendsRecommdationPlugin = () => {
       }
 
       const configFile = configs[0]
-      const config = ConfigParser.parse(configFile)
-      if (!Array.isArray(config.extends)) {
-        config.extends = [config.extends]
+      if (!checkModuleInstalled('eslint-config-standard-with-typescript')) {
+        return resolve()
       }
 
-      const index = config.extends.indexOf('standard-with-typescript')
-      if (index === -1) {
-        resolve()
-      } else {
-        requestYesOrNo(
-          'Would you want to change standard-with-typescript extends to plugin:@typescript-eslint/recommended?'
-        ).then(async (res) => {
-          if (res) {
-            const { packageManager } = await requestPackageManager()
+      requestYesOrNo(
+        'Would you want to change standard-with-typescript extends to plugin:@typescript-eslint/recommended?'
+      ).then(async (res) => {
+        if (res) {
+          const { packageManager } = await requestPackageManager()
 
-            await uninstallStandardTypescriptPlugin(packageManager)
-            await installTypescriptRecommendedPlugin(packageManager)
-            config.extends.splice(
-              index,
-              1,
-              'plugin:@typescript-eslint/recommended'
-            )
+          await uninstallStandardTypescriptPlugin(packageManager)
+          await installTypescriptRecommendedPlugin(packageManager)
+
+          try {
+            const config = ConfigParser.parse(configFile)
+            if (!Array.isArray(config.extends)) {
+              config.extends = [config.extends]
+            }
+
+            const index = config.extends.indexOf('standard-with-typescript')
+            if (index !== -1) {
+              config.extends.splice(
+                index,
+                1,
+                'plugin:@typescript-eslint/recommended'
+              )
+            } else {
+              config.extends.push('plugin:@typescript-eslint/recommended')
+            }
             Json2Config.write(configFile, config)
-            resolve()
+          } catch {
+            console.log(Text.red('update eslint config failed...'))
+            console.log(Text.yellow('please update it manually.'))
+            console.log(
+              Text.yellow(
+                `add "plugin:@typescript-eslint/recommended" to extends setting, or replace "standard-with-typescript" to "plugin:@typescript-eslint/recommended", if it exists.`
+              )
+            )
           }
-        })
-      }
+        }
+        resolve()
+      })
     } catch (e) {
       console.log(e)
       return reject(e)

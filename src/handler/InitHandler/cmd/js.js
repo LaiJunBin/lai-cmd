@@ -62,16 +62,36 @@ const updateEslintConfigForBabelEslintParser = async () => {
       }
 
       const configFile = configs[0]
-      const config = ConfigParser.parse(configFile)
 
-      config.parser = '@babel/eslint-parser'
-      if (!config.parserOptions) {
-        config.parserOptions = {}
+      try {
+        const config = ConfigParser.parse(configFile)
+
+        config.parser = '@babel/eslint-parser'
+        if (!config.parserOptions) {
+          config.parserOptions = {}
+        }
+        config.parserOptions.requireConfigFile = false
+
+        Json2Config.write(configFile, config)
+        console.log(Text.green('update eslint config OK...'))
+      } catch {
+        console.log(Text.red('update eslint config failed...'))
+        console.log(Text.yellow('please update it manually.'))
+        console.log(
+          Text.yellow('add the following config to the eslint config file:')
+        )
+        console.log(
+          Text.yellow(
+            `{
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false
+  }
+}`
+          )
+        )
       }
-      config.parserOptions.requireConfigFile = false
 
-      Json2Config.write(configFile, config)
-      console.log(Text.green('update eslint config OK...'))
       resolve()
     } catch (e) {
       console.log(e)

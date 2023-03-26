@@ -94,30 +94,39 @@ export const updateEslintConfigForPrettier = () => {
       }
 
       const configFile = configs[0]
-      const config = ConfigParser.parse(configFile)
+      try {
+        const config = ConfigParser.parse(configFile)
 
-      config.extends = config.extends || []
-      config.plugins = config.plugins || []
-      config.rules = config.rules || {}
+        config.extends = config.extends || []
+        config.plugins = config.plugins || []
+        config.rules = config.rules || {}
 
-      if (typeof config.extends === 'string') {
-        config.extends = [config.extends]
+        if (typeof config.extends === 'string') {
+          config.extends = [config.extends]
+        }
+
+        if (!config.extends.includes('prettier')) {
+          config.extends.push('prettier')
+        }
+
+        if (!config.plugins.includes('prettier')) {
+          config.plugins.push('prettier')
+        }
+
+        if (!config.rules['prettier/prettier']) {
+          config.rules['prettier/prettier'] = 'error'
+        }
+
+        Json2Config.write(configFile, config)
+        console.log(Text.green('update eslint config OK...'))
+      } catch {
+        console.log(Text.red('update eslint config error...'))
+        console.log(Text.yellow('please add the following config manually:'))
+        console.log(Text.yellow('extends: prettier'))
+        console.log(Text.yellow('plugins: prettier'))
+        console.log(Text.yellow('rules: prettier/prettier: error'))
       }
 
-      if (!config.extends.includes('prettier')) {
-        config.extends.push('prettier')
-      }
-
-      if (!config.plugins.includes('prettier')) {
-        config.plugins.push('prettier')
-      }
-
-      if (!config.rules['prettier/prettier']) {
-        config.rules['prettier/prettier'] = 'error'
-      }
-
-      Json2Config.write(configFile, config)
-      console.log(Text.green('update eslint config OK...'))
       resolve()
     } catch (e) {
       console.log(e)
