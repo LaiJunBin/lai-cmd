@@ -20,4 +20,5 @@ react    | Execute init js and react-tailwindcss and set @babel/preset-react. |
 vue-tailwindcss    | Install and config tailwind for vue3 project. |
 vue    | Init eslint and prettier and execute vue-tailwindcss cmd. |
 svelte-tailwindcss    | Install and config tailwind for svelte project. |
-svelte    | Init eslint and prettier and tailwindcss and simple vscode settings |
+svelte-testing    | Install vitest, @testing-library/svelte, jsdom and setup-related config |
+svelte    | Init eslint and prettier and tailwindcss and testing and simple vscode settings |

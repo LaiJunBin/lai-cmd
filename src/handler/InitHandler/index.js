@@ -4,6 +4,7 @@ const InitReact = require('./cmd/react')
 const InitReactTailwindCSS = require('./cmd/react-tailwindcss')
 const InitSvelte = require('./cmd/svelte')
 const InitSvelteTailwindCSS = require('./cmd/svelte-tailwindcss')
+const InitSvelteTesting = require('./cmd/svelte-testing')
 const InitVue = require('./cmd/vue')
 const InitVueTailwindCSS = require('./cmd/vue-tailwindcss')
 
@@ -16,5 +17,6 @@ InitHandler.register('vue', InitVue)
 InitHandler.register('vue-tailwindcss', InitVueTailwindCSS)
 InitHandler.register('svelte', InitSvelte)
 InitHandler.register('svelte-tailwindcss', InitSvelteTailwindCSS)
+InitHandler.register('svelte-testing', InitSvelteTesting)
 
 module.exports = InitHandler

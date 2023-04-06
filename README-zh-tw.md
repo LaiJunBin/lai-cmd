@@ -20,4 +20,5 @@ react    | 執行 init js 與 init react-tailwindcss 並設定 @babel/preset-rea
 vue-tailwindcss    | 在 vue 專案 安裝和設定 tailwindcss |
 vue    | 初始化 eslint, prettier 與 init vue-tailwindcss |
 svelte-tailwindcss    | 在 svelte 專案 安裝和設定 tailwindcss |
-svelte    | 初始化 eslint, prettier, tailwindcss 與建立簡單的 vscode settings |
+svelte-testing    | 安裝 vitest, @testing-library/svelte, jsdom 及設定相關 config |
+svelte    | 初始化 eslint, prettier, tailwindcss, testing 與建立簡單的 vscode settings |

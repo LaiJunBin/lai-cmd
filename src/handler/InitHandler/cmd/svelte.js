@@ -12,11 +12,22 @@ const ConfigParser = require('../../../lib/ConfigParser')
 const Json2Config = require('../../../lib/JSON2Config')
 const InitSvelteTailwindCSS = require('./svelte-tailwindcss')
 const { requestAddRecommendationExtensionToVsCodeConfig } = require('./utils')
+const InitSvelteTesting = require('./svelte-testing')
 
 const requestInitSvelteTailwindCSS = () => {
   return requestYesOrNo('Do you want to initialize tailwindcss?').then(
     (res) => res && InitSvelteTailwindCSS()
   )
+}
+
+const requestInitSvelteTesting = () => {
+  return requestYesOrNo(
+    'Do you want to initialize svelte testing-library for component testing?'
+  ).then((res) => {
+    if (!res) return Promise.resolve()
+
+    return InitSvelteTesting()
+  })
 }
 
 const uninstallSvelte3Plugin = async (packageManager) => {
@@ -234,6 +245,7 @@ const InitSvelte = () => {
     .then(requestChangeSvelte3ToSvelte)
     .then(requestInitPrettier)
     .then(requestInitSvelteTailwindCSS)
+    .then(requestInitSvelteTesting)
     .then(requestGenerateVscodeSettings)
     .then(() =>
       requestAddRecommendationExtensionToVsCodeConfig(['svelte.svelte-vscode'])
