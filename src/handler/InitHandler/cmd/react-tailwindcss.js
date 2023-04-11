@@ -5,6 +5,7 @@ const {
   initTailwindConfig,
   updateTailwindConfig,
   requestAddTailwindRecommendationExtensions,
+  requestInstallPrettierPluginTailwindcss,
 } = require('./utils/tailwind')
 
 const updateIndexCSS = () => {
@@ -36,6 +37,7 @@ const InitReactTailwindCSS = () => {
     .then(initTailwindConfig)
     .then(updateTailwindConfig)
     .then(updateIndexCSS)
+    .then(requestInstallPrettierPluginTailwindcss)
     .then(requestAddTailwindRecommendationExtensions)
 }
 module.exports = InitReactTailwindCSS

@@ -116,6 +116,45 @@ export const updateTailwindConfig = () => {
   })
 }
 
+export const installPrettierPluginTailwindcss = async () => {
+  console.log(Text.green('install prettier-plugin-tailwindcss...'))
+
+  const { packageManager, args } = await requestPackageManager()
+  args.push('prettier-plugin-tailwindcss')
+
+  return new Promise((resolve, reject) => {
+    const shell = spawn(packageManager, args, {
+      stdio: 'inherit',
+      shell: true,
+    })
+
+    shell.on('close', (code) => {
+      if (code !== 0) {
+        const error = `${Text.red(
+          'ERROR'
+        )}: [install prettier-plugin-tailwindcss] terminated code: ${code}`
+        console.log(error)
+        return reject(error)
+      }
+
+      console.log(Text.green('dependencies installed.'))
+      resolve()
+    })
+  })
+}
+
+export const requestInstallPrettierPluginTailwindcss = async () => {
+  if (
+    !(await requestYesOrNo(
+      'Would you like to install prettier-plugin-tailwindcss?'
+    ))
+  ) {
+    return
+  }
+
+  return installPrettierPluginTailwindcss()
+}
+
 export const requestAddTailwindRecommendationExtensions = async () => {
   return requestAddRecommendationExtensionToVsCodeConfig([
     'bradlc.vscode-tailwindcss',
