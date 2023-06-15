@@ -1,8 +1,0 @@
-{
-    "compilerOptions": {
-        "checkJs": true,
-        "baseUrl": "./src",
-        "target": "ES2015",
-        "moduleResolution": "node"
-    }
-}

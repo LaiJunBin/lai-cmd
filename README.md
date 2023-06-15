@@ -1,24 +1,11 @@
 # lai-cmd
 
-This is a command-line interface based on npx for generating my web development environment.
+This is a command-line interface based on npx for generating web development environment.
 
-English｜[繁體中文](https://github.com/LaiJunBin/lai-cmd/blob/main/README-zh-tw.md#lai-cmd)
+English｜[繁體中文](https://github.com/LaiJunBin/lai-cmd/blob/develop/README-zh-tw.md#lai-cmd)
 
-## Usage:
+## Todo
 
-```
-$ npx lai-cmd init <source>
-```
+Features are currently being added to the wishlist, so there is currently no documentation in English.
 
-`<source>` currently support the following:
-
-Source           | Description  |
---------------|-----|
-js    | Init eslint and prettier and vscode jsconfig file. |
-react-tailwindcss    | Install and config tailwind for react project. |
-react    | Execute init js and react-tailwindcss and set @babel/preset-react. |
-vue-tailwindcss    | Install and config tailwind for vue3 project. |
-vue    | Init eslint and prettier and execute vue-tailwindcss cmd. |
-svelte-tailwindcss    | Install and config tailwind for svelte project. |
-svelte-testing    | Install vitest, @testing-library/svelte, jsdom and setup-related config |
-svelte    | Init eslint and prettier and tailwindcss and testing and simple vscode settings |
+If you have any ideas, you can go to the [Chinese documentation](https://github.com/LaiJunBin/lai-cmd/blob/develop/README-zh-tw.md#lai-cmd).
