@@ -1,16 +1,16 @@
-import prompts from 'prompts'
-import { Framework } from '../../models/frameworks/framework'
-import { React } from '../../models/frameworks/react'
-import { Vue } from '../../models/frameworks/vue'
-import { Svelte } from '../../models/frameworks/svelte'
-import { Others } from '../../models/frameworks/others'
-import { PackageManager } from '../../models/pacakge-manager'
+import prompts from 'prompts';
+import { Framework } from '../../models/frameworks/framework';
+import { React } from '../../models/frameworks/react';
+import { Vue } from '../../models/frameworks/vue';
+import { Svelte } from '../../models/frameworks/svelte';
+import { Others } from '../../models/frameworks/others';
+import { PackageManager } from '../../models/pacakge-manager';
 
 export const initAction = async () => {
   const {
     packageManager,
   }: {
-    packageManager: PackageManager
+    packageManager: PackageManager;
   } = await prompts({
     type: 'select',
     name: 'packageManager',
@@ -20,12 +20,12 @@ export const initAction = async () => {
       { title: 'yarn', value: new PackageManager('yarn') },
       { title: 'pnpm', value: new PackageManager('pnpm') },
     ],
-  })
+  });
 
   const {
     framework,
   }: {
-    framework: typeof Framework
+    framework: typeof Framework;
   } = await prompts({
     type: 'select',
     name: 'framework',
@@ -36,8 +36,8 @@ export const initAction = async () => {
       { title: 'svelte', value: Svelte },
       { title: 'None of the above', value: Others },
     ],
-  })
+  });
 
-  const frameworkInstance = new framework(packageManager)
-  frameworkInstance.install()
-}
+  const frameworkInstance = new framework(packageManager);
+  frameworkInstance.install();
+};

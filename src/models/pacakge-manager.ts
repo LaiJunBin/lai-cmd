@@ -1,10 +1,10 @@
-import { spawn } from 'child_process'
+import { spawn } from 'child_process';
 
 export class PackageManager {
-  private tool: 'npm' | 'yarn' | 'pnpm'
+  private tool: 'npm' | 'yarn' | 'pnpm';
 
   constructor(tool: 'npm' | 'yarn' | 'pnpm') {
-    this.tool = tool
+    this.tool = tool;
   }
 
   public async install(
@@ -19,20 +19,20 @@ export class PackageManager {
           stdio: 'inherit',
           shell: true,
         }
-      )
+      );
 
       child.on('error', (error) => {
-        reject(error)
-      })
+        reject(error);
+      });
 
       child.on('close', (code) => {
         if (code === 0) {
-          resolve()
+          resolve();
         } else {
-          reject()
+          reject();
         }
-      })
-    })
+      });
+    });
   }
 
   public async isInstalled(packageName: string): Promise<boolean> {
@@ -40,19 +40,19 @@ export class PackageManager {
       const child = spawn(this.tool, ['list', packageName], {
         stdio: 'ignore',
         shell: true,
-      })
+      });
 
       child.on('error', (error) => {
-        reject(error)
-      })
+        reject(error);
+      });
 
       child.on('close', (code) => {
         if (code === 0) {
-          resolve(true)
+          resolve(true);
         } else {
-          resolve(false)
+          resolve(false);
         }
-      })
-    })
+      });
+    });
   }
 }

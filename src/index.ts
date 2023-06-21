@@ -1,5 +1,5 @@
 #!/bin/env node
 
-import cli from './cli'
+import cli from './cli';
 
-cli(process.argv)
+cli(process.argv);
