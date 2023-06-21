@@ -2,7 +2,7 @@
 
 This is a command-line interface based on npx for generating web development environment.
 
-English｜[繁體中文](https://github.com/LaiJunBin/lai-cmd/blob/develop/README-zh-tw.md#lai-cmd)
+English ｜[繁體中文](https://github.com/LaiJunBin/lai-cmd/blob/develop/README-zh-tw.md#lai-cmd)
 
 ## Todo
 

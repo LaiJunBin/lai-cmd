@@ -1,5 +1,5 @@
 import { program } from 'commander'
-import initAction from './actions/init'
+import { initAction } from './actions/init'
 import { version } from '../package.json'
 
 const cli = async (argv: string[]) => {

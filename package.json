@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "dev": "tsup src/index.ts --format esm --minify --clean --sourcemap --watch",
+    "start": "node dist/index.mjs init",
     "build": "tsup src/index.ts --format esm --minify --clean",
     "test": "vitest"
   },
