@@ -20,6 +20,7 @@
     "start": "node dist/index.mjs init",
     "build": "tsup src/index.ts --format esm --minify --clean",
     "test": "vitest",
+    "postinstall": "husky install",
     "lint": "eslint --fix src/**/*.{ts,js,json,md}",
     "format": "prettier --write src/**/*.{ts,js,json,md}"
   },
