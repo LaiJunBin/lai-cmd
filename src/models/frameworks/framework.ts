@@ -28,43 +28,57 @@ export class Framework {
       type: 'multiselect',
       name: 'toolsToBeInstalled',
       message: 'Which tools do you want to install?',
-      choices: [
-        { title: 'ESLint', value: 'eslint' },
-        { title: 'Prettier', value: 'prettier' },
-        { title: 'Husky', value: 'husky' },
-        { title: 'Lint Staged', value: 'lint-staged' },
-        { title: 'Tailwind', value: 'tailwind' },
-      ],
+      choices: (isESLintInstallable(this)
+        ? [{ title: 'ESLint', value: 'eslint' }]
+        : []
+      )
+        .concat(
+          isPrettierInstallable(this)
+            ? [{ title: 'Prettier', value: 'prettier' }]
+            : []
+        )
+        .concat(
+          isHuskyInstallable(this) ? [{ title: 'Husky', value: 'husky' }] : []
+        )
+        .concat(
+          isLintStagedInstallable(this)
+            ? [{ title: 'Lint Staged', value: 'lint-staged' }]
+            : []
+        )
+        .concat(
+          isTailwindInstallable(this)
+            ? [{ title: 'Tailwind', value: 'tailwind' }]
+            : []
+        ),
     });
 
-    if (isESLintInstallable(this)) {
-      if (toolsToBeInstalled.includes('eslint')) {
-        await this.installESLint();
-      }
+    if (isESLintInstallable(this) && toolsToBeInstalled.includes('eslint')) {
+      await this.installESLint();
     }
 
-    if (isPrettierInstallable(this)) {
-      if (toolsToBeInstalled.includes('prettier')) {
-        await this.installPrettier();
-      }
+    if (
+      isPrettierInstallable(this) &&
+      toolsToBeInstalled.includes('prettier')
+    ) {
+      await this.installPrettier();
     }
 
-    if (isHuskyInstallable(this)) {
-      if (toolsToBeInstalled.includes('husky')) {
-        await this.installHusky();
-      }
+    if (isHuskyInstallable(this) && toolsToBeInstalled.includes('husky')) {
+      await this.installHusky();
     }
 
-    if (isLintStagedInstallable(this)) {
-      if (toolsToBeInstalled.includes('lint-staged')) {
-        await this.installLintStaged();
-      }
+    if (
+      isLintStagedInstallable(this) &&
+      toolsToBeInstalled.includes('lint-staged')
+    ) {
+      await this.installLintStaged();
     }
 
-    if (isTailwindInstallable(this)) {
-      if (toolsToBeInstalled.includes('tailwind')) {
-        await this.installTailwind();
-      }
+    if (
+      isTailwindInstallable(this) &&
+      toolsToBeInstalled.includes('tailwind')
+    ) {
+      await this.installTailwind();
     }
   }
 }
