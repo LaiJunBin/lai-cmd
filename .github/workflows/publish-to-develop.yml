@@ -43,7 +43,7 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@v1.3.1
       - name: Setup env
         run: |
-          echo "GITHUB_SHA_SHORT=$(echo ${{ github.sha }} | cut -c -9)" >> $GITHUB_ENV
+          echo "GITHUB_SHA_SHORT=$(echo ${{ github.event.workflow_run.head_commit.id }} | cut -c -9)" >> $GITHUB_ENV
           echo "CURRENT_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
       - name: Update package.json version
         uses: jossef/action-set-json-field@v2.1
