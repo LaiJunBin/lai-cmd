@@ -5,6 +5,11 @@ import { isPrettierInstallable } from '../interfaces/prettier-installable';
 import { isHuskyInstallable } from '../interfaces/husky-installabe';
 import { isLintStagedInstallable } from '../interfaces/lint-staged-installable';
 import { isTailwindInstallable } from '../interfaces/tailwind-installable';
+import { existESLintConfigFiles } from '../../utils/exist-eslint-config-files';
+import { existPrettierConfigFiles } from '../../utils/exist-prettier-config-files';
+import { existHuskyConfigFiles } from '../../utils/exist-husky-config-files';
+import { existLintStagedConfigFiles } from '../../utils/exist-lintstage-config-files';
+import { existTailwindConfigFiles } from '../../utils/exist-tailwind-config-files';
 
 export class Framework {
   protected packageManager: PackageManager;
@@ -29,25 +34,57 @@ export class Framework {
       name: 'toolsToBeInstalled',
       message: 'Which tools do you want to install?',
       choices: (isESLintInstallable(this)
-        ? [{ title: 'ESLint', value: 'eslint' }]
+        ? [
+            {
+              title: 'ESLint',
+              value: 'eslint',
+              disabled: existESLintConfigFiles(),
+            },
+          ]
         : []
       )
         .concat(
           isPrettierInstallable(this)
-            ? [{ title: 'Prettier', value: 'prettier' }]
+            ? [
+                {
+                  title: 'Prettier',
+                  value: 'prettier',
+                  disabled: existPrettierConfigFiles(),
+                },
+              ]
             : []
         )
         .concat(
-          isHuskyInstallable(this) ? [{ title: 'Husky', value: 'husky' }] : []
+          isHuskyInstallable(this)
+            ? [
+                {
+                  title: 'Husky',
+                  value: 'husky',
+                  disabled: existHuskyConfigFiles(),
+                },
+              ]
+            : []
         )
         .concat(
           isLintStagedInstallable(this)
-            ? [{ title: 'Lint Staged', value: 'lint-staged' }]
+            ? [
+                {
+                  title: 'Lint Staged',
+                  value: 'lint-staged',
+                  disabled: existLintStagedConfigFiles(),
+                },
+              ]
             : []
         )
         .concat(
           isTailwindInstallable(this)
-            ? [{ title: 'Tailwind', value: 'tailwind' }]
+            ? [
+                {
+                  title: 'Tailwind',
+                  value: 'tailwind',
+                  disabled: existTailwindConfigFiles(),
+                },
+              ]
             : []
         ),
     });
