@@ -6,7 +6,7 @@ on:
       - completed
     branches: [develop]
 jobs:
-  pre-test-and-build:
+  publish-to-develop:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
