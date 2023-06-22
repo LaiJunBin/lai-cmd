@@ -8,6 +8,7 @@ import {
   PackageManager,
   PackageManagerType,
 } from '../../models/pacakge-manager';
+import { getInitialPackageManager } from '../../utils/get-initial-package-manager';
 
 async function selectPackageManager(): Promise<PackageManagerType> {
   const choices = [
@@ -15,6 +16,10 @@ async function selectPackageManager(): Promise<PackageManagerType> {
     { title: 'yarn', value: 'yarn' },
     { title: 'pnpm', value: 'pnpm' },
   ];
+
+  const initialPackageManager = getInitialPackageManager();
+  const initial =
+    choices.findIndex((choice) => choice.value === initialPackageManager) || 0;
 
   const {
     packageManager,
@@ -24,6 +29,7 @@ async function selectPackageManager(): Promise<PackageManagerType> {
     type: 'select',
     name: 'packageManager',
     message: 'Which package manager do you use?',
+    initial,
     choices,
   });
 
