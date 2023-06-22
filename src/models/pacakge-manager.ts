@@ -1,9 +1,10 @@
 import { spawn } from 'child_process';
 
+export type PackageManagerType = 'npm' | 'yarn' | 'pnpm';
 export class PackageManager {
-  private tool: 'npm' | 'yarn' | 'pnpm';
+  private tool: PackageManagerType;
 
-  constructor(tool: 'npm' | 'yarn' | 'pnpm') {
+  constructor(tool: PackageManagerType) {
     this.tool = tool;
   }
 
