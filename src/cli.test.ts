@@ -1,5 +1,5 @@
 import cli from './cli';
-import initAction from './actions/init';
+import { initAction } from './actions/init';
 import { version } from '../package.json';
 import { mockedStdout } from './test-utils';
 
