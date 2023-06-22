@@ -1,9 +1,7 @@
-import { existsSync } from 'fs';
+import fs from 'fs';
 
 export function existESLintConfigFiles(): boolean {
-  return (
-    existsSync('.eslintrc.json') ||
-    existsSync('.eslintrc.cjs') ||
-    existsSync('.eslintrc.yml')
-  );
+  return fs.readdirSync('.').some((fileName) => {
+    return fileName.startsWith('.eslintrc');
+  });
 }

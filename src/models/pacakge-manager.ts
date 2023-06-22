@@ -8,18 +8,39 @@ export class PackageManager {
   }
 
   public async install(
-    packages: string[],
+    packageNames: string[],
     devDependencies = false
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       const child = spawn(
         this.tool,
-        ['i', devDependencies ? '-D' : '', ...packages],
+        ['i', devDependencies ? '-D' : '', ...packageNames],
         {
           stdio: 'inherit',
           shell: true,
         }
       );
+
+      child.on('error', (error) => {
+        reject(error);
+      });
+
+      child.on('close', (code) => {
+        if (code === 0) {
+          resolve();
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
+  public async create(packageName: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const child = spawn(this.tool, ['create', packageName], {
+        stdio: 'inherit',
+        shell: true,
+      });
 
       child.on('error', (error) => {
         reject(error);
@@ -51,6 +72,31 @@ export class PackageManager {
           resolve(true);
         } else {
           resolve(false);
+        }
+      });
+    });
+  }
+
+  public async addScript(scriptName: string, script: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const child = spawn(
+        'npm',
+        ['pkg', 'set', `scripts.${scriptName}="${script}"`],
+        {
+          stdio: 'inherit',
+          shell: true,
+        }
+      );
+
+      child.on('error', (error) => {
+        reject(error);
+      });
+
+      child.on('close', (code) => {
+        if (code === 0) {
+          resolve();
+        } else {
+          reject();
         }
       });
     });

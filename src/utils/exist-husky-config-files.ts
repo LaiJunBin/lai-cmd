@@ -1,5 +1,5 @@
-import { existsSync } from 'fs';
+import fs from 'fs';
 
 export function existHuskyConfigFiles(): boolean {
-  return existsSync('.husky/pre-commit');
+  return fs.existsSync('.husky/pre-commit');
 }

@@ -13,6 +13,13 @@ import { existTailwindConfigFiles } from '../../utils/exist-tailwind-config-file
 
 export class Framework {
   protected packageManager: PackageManager;
+  protected toolsToBeInstalled: (
+    | 'eslint'
+    | 'prettier'
+    | 'husky'
+    | 'lint-staged'
+    | 'tailwind'
+  )[];
 
   constructor(packageManager: PackageManager) {
     this.packageManager = packageManager;
@@ -88,32 +95,36 @@ export class Framework {
             : []
         ),
     });
+    this.toolsToBeInstalled = toolsToBeInstalled;
 
-    if (isESLintInstallable(this) && toolsToBeInstalled.includes('eslint')) {
+    if (
+      isESLintInstallable(this) &&
+      this.toolsToBeInstalled.includes('eslint')
+    ) {
       await this.installESLint();
     }
 
     if (
       isPrettierInstallable(this) &&
-      toolsToBeInstalled.includes('prettier')
+      this.toolsToBeInstalled.includes('prettier')
     ) {
       await this.installPrettier();
     }
 
-    if (isHuskyInstallable(this) && toolsToBeInstalled.includes('husky')) {
+    if (isHuskyInstallable(this) && this.toolsToBeInstalled.includes('husky')) {
       await this.installHusky();
     }
 
     if (
       isLintStagedInstallable(this) &&
-      toolsToBeInstalled.includes('lint-staged')
+      this.toolsToBeInstalled.includes('lint-staged')
     ) {
       await this.installLintStaged();
     }
 
     if (
       isTailwindInstallable(this) &&
-      toolsToBeInstalled.includes('tailwind')
+      this.toolsToBeInstalled.includes('tailwind')
     ) {
       await this.installTailwind();
     }

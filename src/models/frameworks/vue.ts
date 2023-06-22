@@ -14,23 +14,23 @@ export class Vue
     LintStagedInstallable,
     TailwindInstallable
 {
-  installESLint(): Promise<void> {
+  async installESLint(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  installPrettier(): Promise<void> {
+  async installPrettier(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  installHusky(): Promise<void> {
+  async installHusky(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  installLintStaged(): Promise<void> {
+  async installLintStaged(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  installTailwind(): Promise<void> {
+  async installTailwind(): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

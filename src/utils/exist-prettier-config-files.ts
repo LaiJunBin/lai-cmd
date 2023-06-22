@@ -1,5 +1,7 @@
-import { existsSync } from 'fs';
+import fs from 'fs';
 
 export function existPrettierConfigFiles(): boolean {
-  return existsSync('.prettierrc.json') || existsSync('.prettierrc');
+  return fs.readdirSync('.').some((fileName) => {
+    return fileName.startsWith('.prettierrc');
+  });
 }

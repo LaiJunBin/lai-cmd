@@ -31,9 +31,9 @@ export const initAction = async () => {
     name: 'framework',
     message: 'Which framework do you use?',
     choices: [
-      { title: 'react', value: React },
-      { title: 'vue', value: Vue },
-      { title: 'svelte', value: Svelte },
+      { title: 'React', value: React },
+      { title: 'Vue', value: Vue },
+      { title: 'Svelte', value: Svelte },
       { title: 'None of the above', value: Others },
     ],
   });

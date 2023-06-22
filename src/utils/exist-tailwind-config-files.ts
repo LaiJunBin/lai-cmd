@@ -1,5 +1,5 @@
-import { existsSync } from 'fs';
+import fs from 'fs';
 
 export function existTailwindConfigFiles(): boolean {
-  return existsSync('tailwind.config.js');
+  return fs.existsSync('tailwind.config.js');
 }
