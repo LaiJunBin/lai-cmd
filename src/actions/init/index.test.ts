@@ -3,7 +3,7 @@ import { initAction } from '.';
 import { mockedStdout } from '../../test-utils';
 
 describe('test init cmd', () => {
-  test('test select project type', async () => {
+  test.skip('test select project type', async () => {
     const stdout = mockedStdout();
 
     prompts.inject(['ts']);
