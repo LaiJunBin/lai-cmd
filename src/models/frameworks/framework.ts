@@ -1,132 +1,50 @@
 import prompts from 'prompts';
 import { PackageManager } from '../pacakge-manager';
-import { isESLintInstallable } from '../interfaces/eslint-installable';
-import { isPrettierInstallable } from '../interfaces/prettier-installable';
-import { isHuskyInstallable } from '../interfaces/husky-installabe';
-import { isLintStagedInstallable } from '../interfaces/lint-staged-installable';
-import { isTailwindInstallable } from '../interfaces/tailwind-installable';
-import { existESLintConfigFiles } from '../../utils/exist-eslint-config-files';
-import { existPrettierConfigFiles } from '../../utils/exist-prettier-config-files';
-import { existHuskyConfigFiles } from '../../utils/exist-husky-config-files';
-import { existLintStagedConfigFiles } from '../../utils/exist-lintstage-config-files';
-import { existTailwindConfigFiles } from '../../utils/exist-tailwind-config-files';
+import { Tool } from '../tool';
 
 export class Framework {
-  protected packageManager: PackageManager;
-  protected toolsToBeInstalled: (
-    | 'eslint'
-    | 'prettier'
-    | 'husky'
-    | 'lint-staged'
-    | 'tailwind'
-  )[];
+  protected _packageManager: PackageManager;
+  protected _toolsToBeInstalled: Tool[];
+  protected tools: Tool[] = [];
 
-  constructor(packageManager: PackageManager) {
-    this.packageManager = packageManager;
+  get packageManager(): PackageManager {
+    return this._packageManager;
+  }
+
+  get toolsToBeInstalled(): Tool[] {
+    return this._toolsToBeInstalled;
+  }
+
+  constructor(packageManager: PackageManager, tools: Tool[] = []) {
+    this._packageManager = packageManager;
+    this.tools = tools;
   }
 
   async install(): Promise<void> {
+    if (this.tools.length === 0) {
+      console.log('No tools can install.');
+      return;
+    }
+
     const {
       toolsToBeInstalled,
     }: {
-      toolsToBeInstalled: (
-        | 'eslint'
-        | 'prettier'
-        | 'husky'
-        | 'lint-staged'
-        | 'tailwind'
-      )[];
+      toolsToBeInstalled: Tool[];
     } = await prompts({
       type: 'multiselect',
       name: 'toolsToBeInstalled',
       message: 'Which tools do you want to install?',
-      choices: (isESLintInstallable(this)
-        ? [
-            {
-              title: 'ESLint',
-              value: 'eslint',
-              disabled: existESLintConfigFiles(),
-            },
-          ]
-        : []
-      )
-        .concat(
-          isPrettierInstallable(this)
-            ? [
-                {
-                  title: 'Prettier',
-                  value: 'prettier',
-                  disabled: existPrettierConfigFiles(),
-                },
-              ]
-            : []
-        )
-        .concat(
-          isHuskyInstallable(this)
-            ? [
-                {
-                  title: 'Husky',
-                  value: 'husky',
-                  disabled: existHuskyConfigFiles(),
-                },
-              ]
-            : []
-        )
-        .concat(
-          isLintStagedInstallable(this)
-            ? [
-                {
-                  title: 'Lint Staged',
-                  value: 'lint-staged',
-                  disabled: existLintStagedConfigFiles(),
-                },
-              ]
-            : []
-        )
-        .concat(
-          isTailwindInstallable(this)
-            ? [
-                {
-                  title: 'Tailwind',
-                  value: 'tailwind',
-                  disabled: existTailwindConfigFiles(),
-                },
-              ]
-            : []
-        ),
+      choices: this.tools.map((tool) => tool.promptChoice),
     });
-    this.toolsToBeInstalled = toolsToBeInstalled;
 
-    if (
-      isESLintInstallable(this) &&
-      this.toolsToBeInstalled.includes('eslint')
-    ) {
-      await this.installESLint();
+    if (!toolsToBeInstalled || toolsToBeInstalled.length === 0) {
+      console.log('No tools to be installed.');
+      return;
     }
 
-    if (
-      isPrettierInstallable(this) &&
-      this.toolsToBeInstalled.includes('prettier')
-    ) {
-      await this.installPrettier();
-    }
-
-    if (isHuskyInstallable(this) && this.toolsToBeInstalled.includes('husky')) {
-      await this.installHusky();
-    }
-
-    if (
-      isLintStagedInstallable(this) &&
-      this.toolsToBeInstalled.includes('lint-staged')
-    ) {
-      await this.installLintStaged();
-    }
-
-    if (
-      isTailwindInstallable(this) &&
-      this.toolsToBeInstalled.includes('tailwind')
-    ) {
-      await this.installTailwind();
-    }
+    this._toolsToBeInstalled = toolsToBeInstalled;
+    this._toolsToBeInstalled.forEach(async (tool) => {
+      await tool.install(this);
+    });
   }
 }

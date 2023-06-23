@@ -1,14 +1,14 @@
 import prompts from 'prompts';
 import { Framework } from '../../models/frameworks/framework';
-import { React } from '../../models/frameworks/react';
-import { Vue } from '../../models/frameworks/vue';
-import { Svelte } from '../../models/frameworks/svelte';
-import { Others } from '../../models/frameworks/others';
+import { Svelte } from '../../models/frameworks/svelte/svelte';
 import {
   PackageManager,
   PackageManagerType,
 } from '../../models/pacakge-manager';
 import { getInitialPackageManager } from '../../utils/get-initial-package-manager';
+import { React } from '../../models/frameworks/react/react';
+import { Vue } from '../../models/frameworks/vue/vue';
+import { Others } from '../../models/frameworks/others/others';
 
 async function selectPackageManager(): Promise<PackageManagerType> {
   const choices = [
@@ -46,8 +46,8 @@ async function selectFramework(): Promise<typeof Framework> {
     name: 'framework',
     message: 'Which framework do you use?',
     choices: [
-      { title: 'React', value: React },
       { title: 'Vue', value: Vue },
+      { title: 'React', value: React },
       { title: 'Svelte', value: Svelte },
       { title: 'None of the above', value: Others },
     ],
