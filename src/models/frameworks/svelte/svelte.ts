@@ -1,5 +1,5 @@
 import { Framework } from '../framework';
-import { PackageManager } from '../../pacakge-manager';
+import { PackageManager } from '../../package-manager/package-manager';
 import { ESLint } from './tools/eslint/eslint';
 import { Prettier } from './tools/prettier';
 import { Husky } from './tools/husky';

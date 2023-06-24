@@ -1,20 +1,14 @@
 import { spawn } from 'child_process';
+import { PackageManager } from './package-manager';
 
-export type PackageManagerType = 'npm' | 'yarn' | 'pnpm';
-export class PackageManager {
-  private tool: PackageManagerType;
-
-  constructor(tool: PackageManagerType) {
-    this.tool = tool;
-  }
-
+export class Npm extends PackageManager {
   public async install(
     packageNames: string[],
     devDependencies = false
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       const child = spawn(
-        this.tool,
+        'npm',
         ['i', devDependencies ? '-D' : '', ...packageNames],
         {
           stdio: 'inherit',
@@ -36,9 +30,9 @@ export class PackageManager {
     });
   }
 
-  public async create(packageName: string): Promise<void> {
+  public async uninstall(packageNames: string[]): Promise<void> {
     return new Promise((resolve, reject) => {
-      const child = spawn(this.tool, ['create', packageName], {
+      const child = spawn('npm', ['uni', ...packageNames], {
         stdio: 'inherit',
         shell: true,
       });
@@ -57,37 +51,12 @@ export class PackageManager {
     });
   }
 
-  public async isInstalled(packageName: string): Promise<boolean> {
+  public async create(packageName: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const child = spawn(this.tool, ['list', packageName], {
-        stdio: 'ignore',
+      const child = spawn('npm', ['create', packageName], {
+        stdio: 'inherit',
         shell: true,
       });
-
-      child.on('error', (error) => {
-        reject(error);
-      });
-
-      child.on('close', (code) => {
-        if (code === 0) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      });
-    });
-  }
-
-  public async addScript(scriptName: string, script: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const child = spawn(
-        'npm',
-        ['pkg', 'set', `scripts.${scriptName}="${script}"`],
-        {
-          stdio: 'inherit',
-          shell: true,
-        }
-      );
 
       child.on('error', (error) => {
         reject(error);

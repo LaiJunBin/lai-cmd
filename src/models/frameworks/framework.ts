@@ -1,5 +1,5 @@
 import prompts from 'prompts';
-import { PackageManager } from '../pacakge-manager';
+import { PackageManager } from '../package-manager';
 import { Tool } from '../tool';
 
 export class Framework {

@@ -1,30 +1,29 @@
 import prompts from 'prompts';
 import { Framework } from '../../models/frameworks/framework';
 import { Svelte } from '../../models/frameworks/svelte/svelte';
-import {
-  PackageManager,
-  PackageManagerType,
-} from '../../models/pacakge-manager';
 import { getInitialPackageManager } from '../../utils/get-initial-package-manager';
 import { React } from '../../models/frameworks/react/react';
 import { Vue } from '../../models/frameworks/vue/vue';
 import { Others } from '../../models/frameworks/others/others';
+import {
+  PackageManager,
+  initialPackageManager,
+} from '../../models/package-manager';
 
-async function selectPackageManager(): Promise<PackageManagerType> {
-  const choices = [
-    { title: 'npm', value: 'npm' },
-    { title: 'yarn', value: 'yarn' },
-    { title: 'pnpm', value: 'pnpm' },
-  ];
+async function selectPackageManager(): Promise<PackageManager> {
+  const choices = PackageManager.list().map((type) => ({
+    title: type,
+    value: PackageManager.get(type),
+  }));
 
   const initialPackageManager = getInitialPackageManager();
   const initial =
-    choices.findIndex((choice) => choice.value === initialPackageManager) || 0;
+    choices.findIndex((choice) => choice.title === initialPackageManager) || 0;
 
   const {
     packageManager,
   }: {
-    packageManager: PackageManagerType;
+    packageManager: PackageManager;
   } = await prompts({
     type: 'select',
     name: 'packageManager',
@@ -57,10 +56,10 @@ async function selectFramework(): Promise<typeof Framework> {
 }
 
 export const initAction = async () => {
-  const packageManager = await selectPackageManager();
-  const packageManagerInstance = new PackageManager(packageManager);
+  initialPackageManager();
 
+  const packageManager = await selectPackageManager();
   const framework = await selectFramework();
-  const frameworkInstance = new framework(packageManagerInstance);
+  const frameworkInstance = new framework(packageManager);
   frameworkInstance.install();
 };
