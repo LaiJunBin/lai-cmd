@@ -31,6 +31,11 @@ export class Tool {
       return this;
     }
 
+    public selected(): typeof this {
+      this.promptChoice.selected = true;
+      return this;
+    }
+
     public build(): Tool {
       const indentChildren = (children: Tool[]): Tool[] => {
         children.forEach((child) => {

@@ -10,4 +10,5 @@ export const ChangeSvelte3ToSvelte = new Tool.Builder()
   .setPromptChoice({
     title: 'Change svelte3 to svelte',
   })
+  .selected()
   .build();
