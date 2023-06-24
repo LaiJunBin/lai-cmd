@@ -1,6 +1,6 @@
 import { Framework } from '../framework';
 import { PackageManager } from '../../pacakge-manager';
-import { ESLint } from './tools/eslint';
+import { ESLint } from './tools/eslint/eslint';
 import { Prettier } from './tools/prettier';
 import { Husky } from './tools/husky';
 import { LintStaged } from './tools/lintstaged';

@@ -12,6 +12,7 @@ export class Tool {
   public static Builder = class {
     private install: (framework: Framework) => Promise<void>;
     private promptChoice: Omit<Choice, 'value'>;
+    private children: Tool[] = [];
 
     public setInstall(install: typeof this.install): typeof this {
       this.install = install;
@@ -25,20 +26,38 @@ export class Tool {
       return this;
     }
 
+    public setChildren(children: Tool[]): typeof this {
+      this.children = children;
+      return this;
+    }
+
     public build(): Tool {
-      return new Tool(this.install, this.promptChoice);
+      return new Tool(this.install, this.promptChoice, this.children);
     }
   };
 
+  public selected: boolean;
   private constructor(
     public install: (framework: Framework) => Promise<void> = async () => {
       throw new Error('Method not implemented.');
     },
-    public promptChoice: Choice
+    public promptChoice: Choice,
+    public children: Tool[]
   ) {
     this.promptChoice = {
       ...this.promptChoice,
       value: this,
     };
+  }
+
+  get promptChoices(): Choice[] {
+    if (this.selected) {
+      return [
+        this.promptChoice,
+        ...this.children.map((child) => child.promptChoices).flat(),
+      ].flat();
+    }
+
+    return [this.promptChoice].flat();
   }
 }

@@ -26,6 +26,7 @@ export class Framework {
       return;
     }
 
+    const tools = this.tools;
     const {
       toolsToBeInstalled,
     }: {
@@ -34,7 +35,14 @@ export class Framework {
       type: 'multiselect',
       name: 'toolsToBeInstalled',
       message: 'Which tools do you want to install?',
-      choices: this.tools.map((tool) => tool.promptChoice),
+      onRender() {
+        this.value.forEach((choice) => {
+          if (choice.value.selected !== choice.selected) {
+            choice.value.selected = choice.selected;
+          }
+        });
+        this.value = tools.map((tool) => tool.promptChoices).flat();
+      },
     });
 
     if (!toolsToBeInstalled || toolsToBeInstalled.length === 0) {

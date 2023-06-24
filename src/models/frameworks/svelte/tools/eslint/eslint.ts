@@ -1,10 +1,11 @@
-import { existPrettierConfigFiles } from '../../../../utils/exist-prettier-config-files';
-import { pushExtendsToESLintConfigFiles } from '../../../../utils/push-extends-to-eslint-config-files';
-import { Framework } from '../../framework';
-import { Tool } from '../../../tool';
+import { existPrettierConfigFiles } from '../../../../../utils/exist-prettier-config-files';
+import { pushExtendsToESLintConfigFiles } from '../../../../../utils/push-extends-to-eslint-config-files';
+import { Framework } from '../../../framework';
+import { Tool } from '../../../../tool';
 import fs from 'fs';
-import { Prettier } from './prettier';
-import { existESLintConfigFiles } from '../../../../utils/exist-eslint-config-files';
+import { Prettier } from '../prettier';
+import { existESLintConfigFiles } from '../../../../../utils/exist-eslint-config-files';
+import { ChangeSvelte3ToSvelte } from './change-svelte3-to-svelte';
 
 const install = async (framework: Framework) => {
   await framework.packageManager.create('@eslint/config');
@@ -39,4 +40,5 @@ export const ESLint = new Tool.Builder()
     title: 'ESLint',
     disabled: existESLintConfigFiles(),
   })
+  .setChildren([ChangeSvelte3ToSvelte])
   .build();
