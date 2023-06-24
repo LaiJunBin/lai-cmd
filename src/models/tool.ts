@@ -32,6 +32,15 @@ export class Tool {
     }
 
     public build(): Tool {
+      const indentChildren = (children: Tool[]): Tool[] => {
+        children.forEach((child) => {
+          child.promptChoice.title = `  ${child.promptChoice.title}`;
+          indentChildren(child.children);
+        });
+        return children;
+      };
+
+      this.children = indentChildren(this.children);
       return new Tool(this.install, this.promptChoice, this.children);
     }
   };
