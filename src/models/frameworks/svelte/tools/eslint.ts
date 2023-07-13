@@ -1,16 +1,15 @@
-import { Framework } from '../../../framework';
-import { Tool } from '../../../../tool';
+import { Framework } from '../../framework';
+import { Tool } from '../../../tool';
 import {
   existESLintConfigFiles,
   getESLintConfigFileName,
-} from '../../../../../utils/eslint';
-import { ChangeSvelte3ToSvelte } from './change-svelte3-to-svelte';
+} from '../../../../utils/eslint';
 import { ConfigParser } from 'config-parser-master';
-import { PackageManager } from '../../../../package-manager';
+import { PackageManager } from '../../../package-manager';
 import {
   addVSCodeExtensionsToRecommendations,
   getVSCodeSettingsFileName,
-} from '../../../../../utils/vscode';
+} from '../../../../utils/vscode';
 
 async function createESLintConfig(framework: Framework) {
   await framework.packageManager.create('@eslint/config');
@@ -97,5 +96,4 @@ export const ESLint = new Tool.Builder()
     title: 'ESLint',
     disabled: existESLintConfigFiles(),
   })
-  .setChildren([ChangeSvelte3ToSvelte])
   .build();
