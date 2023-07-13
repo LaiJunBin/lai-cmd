@@ -1,4 +1,4 @@
-import { existTailwindConfigFiles } from '../../../../utils/exist-tailwind-config-files';
+import { existTailwindConfigFiles } from '../../../../utils/tailwind';
 import { Framework } from '../../framework';
 import { Tool } from '../../../tool';
 
