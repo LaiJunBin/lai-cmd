@@ -10,16 +10,25 @@ import {
   addVSCodeExtensionsToRecommendations,
   getVSCodeSettingsFileName,
 } from '../../../../utils/vscode';
+import { green, yellow } from 'kolorist';
 
 async function createESLintConfig(framework: Framework) {
+  console.log(green('Create ESLint config file'));
+  if (existESLintConfigFiles()) {
+    console.log(yellow('ESLint config file already exists, skip creating'));
+    return;
+  }
+
   await framework.packageManager.create('@eslint/config');
 }
 
 async function installDependencies(framework: Framework) {
+  console.log(green('Install ESLint svelte plugin'));
   await framework.packageManager.install(['eslint-plugin-svelte'], true);
 }
 
-function updateConfigFile(framework: Framework) {
+async function updateConfigFile(framework: Framework) {
+  console.log(green('Update ESLint config file'));
   const configFile = getESLintConfigFileName();
   const config = ConfigParser.parse(configFile);
   let configExtends = config.get('extends');
@@ -30,8 +39,12 @@ function updateConfigFile(framework: Framework) {
     configExtends.push('plugin:svelte/recommended');
   }
 
-  if (PackageManager.isInstalled('typescript')) {
-    if (PackageManager.isInstalled('eslint-config-standard-with-typescript')) {
+  if (await PackageManager.isInstalled('typescript')) {
+    console.log(green('Update ESLint config file for TypeScript'));
+    if (
+      await PackageManager.isInstalled('eslint-config-standard-with-typescript')
+    ) {
+      console.log(yellow('Uninstall eslint-config-standard-with-typescript'));
       framework.packageManager.uninstall([
         'eslint-config-standard-with-typescript',
       ]);
@@ -55,6 +68,12 @@ function updateConfigFile(framework: Framework) {
 }
 
 async function addScript(framework: Framework) {
+  console.log(green('Add lint script'));
+  if (framework.packageManager.hasScript('lint')) {
+    console.log(yellow('Lint script already exists, skip adding'));
+    return;
+  }
+
   await framework.packageManager.addScript(
     'lint',
     'eslint --fix src/**/*.{ts,js,json,md}'
@@ -62,6 +81,7 @@ async function addScript(framework: Framework) {
 }
 
 function addVSCodeSettings() {
+  console.log(green('Add VSCode settings'));
   const settings = {
     'eslint.validate': ['svelte'],
     'eslint.options': {
@@ -76,15 +96,16 @@ function addVSCodeSettings() {
 }
 
 function updateVSCodeExtensionsFile() {
+  console.log(green('Update VSCode extensions file'));
   const extensions = ['dbaeumer.vscode-eslint'];
   addVSCodeExtensionsToRecommendations(extensions);
 }
 
 const install = async (framework: Framework) => {
-  console.log('ESLint install');
+  console.log(green('ESLint install'));
   await createESLintConfig(framework);
   await installDependencies(framework);
-  updateConfigFile(framework);
+  await updateConfigFile(framework);
   await addScript(framework);
   addVSCodeSettings();
   updateVSCodeExtensionsFile();
@@ -94,6 +115,5 @@ export const ESLint = new Tool.Builder()
   .setInstall(install)
   .setPromptChoice({
     title: 'ESLint',
-    disabled: existESLintConfigFiles(),
   })
   .build();

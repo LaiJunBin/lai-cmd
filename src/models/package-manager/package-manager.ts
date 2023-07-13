@@ -79,6 +79,32 @@ export abstract class PackageManager {
     });
   }
 
+  hasScript(scriptName: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const child = spawn('npm', ['pkg', 'get', `scripts.${scriptName}`], {
+        shell: true,
+      });
+
+      child.on('error', (error) => {
+        reject(error);
+      });
+
+      child.on('close', (code) => {
+        if (code !== 0) {
+          reject();
+        }
+      });
+
+      child.stdout.on('data', (data) => {
+        if (data.toString().trim() === '{}' || data.toString().trim() === '') {
+          resolve(false);
+        }
+
+        resolve(true);
+      });
+    });
+  }
+
   addScript(scriptName: string, script: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const child = spawn(
