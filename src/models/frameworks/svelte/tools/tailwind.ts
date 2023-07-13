@@ -12,24 +12,39 @@ import {
   getPrettierConfigFileName,
 } from '../../../../utils/prettier';
 import { PackageManager } from '../../../package-manager';
+import { green, yellow } from 'kolorist';
 
 async function installDependencies(framework: Framework) {
+  console.log(green('Install TailwindCSS'));
   const installedPackages = ['tailwindcss', 'postcss', 'autoprefixer'];
   await framework.packageManager.install(installedPackages, true);
+  console.log(green('Init TailwindCSS config file'));
+  if (existTailwindConfigFiles()) {
+    console.log(yellow('TailwindCSS config file already exists, skip init'));
+    return;
+  }
   await PackageManager.npx(['tailwindcss', 'init', '-p']);
 }
 
 function updateConfigFile() {
+  console.log(green('Update TailwindCSS config file'));
   const configFile = getTailwindConfigFileName();
   const config = ConfigParser.parse(configFile);
-  config.put('content', [
-    './index.html',
-    './src/**/*.{html,svelte,vue,js,ts,jsx,tsx}',
-  ]);
+  const content = config.get('content', []) as Array<string>;
+
+  if (!content.includes('./index.html')) {
+    content.push('./index.html');
+  }
+  if (!content.includes('./src/**/*.{html,svelte,vue,js,ts,jsx,tsx}')) {
+    content.push('./src/**/*.{html,svelte,vue,js,ts,jsx,tsx}');
+  }
+
+  config.put('content', content);
   config.save();
 }
 
 async function updateCss() {
+  console.log(green('Update index.css file'));
   const defaultCssPath = './src/index.css';
   const result = await prompts({
     type: 'text',
@@ -45,21 +60,29 @@ async function updateCss() {
   }
 
   const file = cssPath;
+  const cssContent = fs.readFileSync(file).toString();
+  if (cssContent.includes('@tailwind')) {
+    console.log(yellow('TailwindCSS already included in index.css, skip'));
+    return;
+  }
+
   const data = `@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-${fs.readFileSync(file).toString()}
+${cssContent}
 `;
 
   fs.writeFileSync(file, data);
 }
 
 async function installPrettierPlugin(framework: Framework) {
+  console.log(green('Install Prettier TailwindCSS plugin'));
   await framework.packageManager.install(['prettier-plugin-tailwindcss'], true);
 }
 
 function updatePrettierConfigFile() {
+  console.log(green('Update Prettier config file'));
   const configFile = getPrettierConfigFileName();
   const config = ConfigParser.parse(configFile);
   const plugins = config.get('plugins', []) as Array<string>;
@@ -71,11 +94,12 @@ function updatePrettierConfigFile() {
 }
 
 const install = async (framework: Framework) => {
-  console.log('Tailwind install');
+  console.log(green('Tailwind install'));
   await installDependencies(framework);
   updateConfigFile();
   await updateCss();
   if (existPrettierConfigFiles()) {
+    console.log(yellow('Prettier config file found, install Prettier plugin'));
     await installPrettierPlugin(framework);
     updatePrettierConfigFile();
   }
@@ -85,6 +109,5 @@ export const Tailwind = new Tool.Builder()
   .setInstall(install)
   .setPromptChoice({
     title: 'Tailwind',
-    disabled: existTailwindConfigFiles(),
   })
   .build();
