@@ -1,4 +1,4 @@
-import { existPrettierConfigFiles } from '../../../../utils/exist-prettier-config-files';
+import { existPrettierConfigFiles } from '../../../../utils/prettier';
 import { Framework } from '../../framework';
 import { Tool } from '../../../tool';
 
