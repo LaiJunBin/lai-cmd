@@ -26,7 +26,7 @@ export abstract class PackageManager {
     return Object.keys(PackageManager.packageManagers);
   }
 
-  async isInstalled(packageName: string): Promise<boolean> {
+  static async isInstalled(packageName: string): Promise<boolean> {
     const keys = ['dependencies', 'devDependencies', 'peerDependencies'];
     const dependencies = {};
     await Promise.all(
@@ -56,6 +56,27 @@ export abstract class PackageManager {
     );
 
     return Object.keys(dependencies).includes(packageName);
+  }
+
+  static npx(args: string[]): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const child = spawn('npx', args, {
+        stdio: 'inherit',
+        shell: true,
+      });
+
+      child.on('error', (error) => {
+        reject(error);
+      });
+
+      child.on('close', (code) => {
+        if (code === 0) {
+          resolve();
+        } else {
+          reject();
+        }
+      });
+    });
   }
 
   addScript(scriptName: string, script: string): Promise<void> {

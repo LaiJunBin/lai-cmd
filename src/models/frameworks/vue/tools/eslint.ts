@@ -1,6 +1,6 @@
 import { Framework } from '../../framework';
 import { Tool } from '../../../tool';
-import { existESLintConfigFiles } from '../../../../utils/exist-eslint-config-files';
+import { existESLintConfigFiles } from '../../../../utils/eslint';
 
 const install = async (framework: Framework) => {
   console.log('eslint install');

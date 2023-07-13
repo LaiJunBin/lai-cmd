@@ -1,37 +1,94 @@
-import { existPrettierConfigFiles } from '../../../../../utils/exist-prettier-config-files';
-import { pushExtendsToESLintConfigFiles } from '../../../../../utils/push-extends-to-eslint-config-files';
 import { Framework } from '../../../framework';
 import { Tool } from '../../../../tool';
-import fs from 'fs';
-import { Prettier } from '../prettier';
-import { existESLintConfigFiles } from '../../../../../utils/exist-eslint-config-files';
+import {
+  existESLintConfigFiles,
+  getESLintConfigFileName,
+} from '../../../../../utils/eslint';
 import { ChangeSvelte3ToSvelte } from './change-svelte3-to-svelte';
+import { ConfigParser } from 'config-parser-master';
+import { PackageManager } from '../../../../package-manager';
+import {
+  addVSCodeExtensionsToRecommendations,
+  getVSCodeSettingsFileName,
+} from '../../../../../utils/vscode';
 
-const install = async (framework: Framework) => {
+async function createESLintConfig(framework: Framework) {
   await framework.packageManager.create('@eslint/config');
+}
 
-  const configExtensionType = ['.js', '.cjs', '.yml', '.json'].find((type) =>
-    fs.existsSync(`.eslintrc${type}`)
-  ) as '.js' | '.cjs' | '.yml' | '.json';
+async function installDependencies(framework: Framework) {
+  await framework.packageManager.install(['eslint-plugin-svelte'], true);
+}
 
-  // parse .eslintrc.{js,cjs,yml,json} and add plugin:svelte/recommended to extends
-  await pushExtendsToESLintConfigFiles(
-    configExtensionType,
-    'plugin:svelte/recommended'
-  );
-
-  if (
-    framework.toolsToBeInstalled.includes(Prettier) ||
-    existPrettierConfigFiles()
-  ) {
-    // parse .eslintrc.{js,cjs,yml,json} and add 'prettier' to extends
-    await pushExtendsToESLintConfigFiles(configExtensionType, 'prettier');
+function updateConfigFile(framework: Framework) {
+  const configFile = getESLintConfigFileName();
+  const config = ConfigParser.parse(configFile);
+  let configExtends = config.get('extends');
+  if (!Array.isArray(configExtends)) {
+    configExtends = [configExtends];
+  }
+  if (!configExtends.includes('plugin:svelte/recommended')) {
+    configExtends.push('plugin:svelte/recommended');
   }
 
+  if (PackageManager.isInstalled('typescript')) {
+    if (PackageManager.isInstalled('eslint-config-standard-with-typescript')) {
+      framework.packageManager.uninstall([
+        'eslint-config-standard-with-typescript',
+      ]);
+    }
+
+    framework.packageManager.install(
+      ['@typescript-eslint/eslint-plugin', '@typescript-eslint/parser'],
+      true
+    );
+    const index = configExtends.indexOf('standard-with-typescript');
+    if (index !== -1) {
+      configExtends.splice(index, 1, 'plugin:@typescript-eslint/recommended');
+    } else {
+      configExtends.push('plugin:@typescript-eslint/recommended');
+    }
+  }
+
+  config.put('extends', configExtends);
+
+  config.save();
+}
+
+async function addScript(framework: Framework) {
   await framework.packageManager.addScript(
     'lint',
-    'prettier --plugin-search-dir . --check . && eslint .'
+    'eslint --fix src/**/*.{ts,js,json,md}'
   );
+}
+
+function addVSCodeSettings() {
+  const settings = {
+    'eslint.validate': ['svelte'],
+    'eslint.options': {
+      extensions: ['.svelte'],
+    },
+  };
+  const vscodeSettingsFile = getVSCodeSettingsFileName();
+  const config = ConfigParser.parse(vscodeSettingsFile);
+  config.put('eslint.validate', settings['eslint.validate']);
+  config.put('eslint.options', settings['eslint.options']);
+  config.save();
+}
+
+function updateVSCodeExtensionsFile() {
+  const extensions = ['dbaeumer.vscode-eslint'];
+  addVSCodeExtensionsToRecommendations(extensions);
+}
+
+const install = async (framework: Framework) => {
+  console.log('ESLint install');
+  await createESLintConfig(framework);
+  await installDependencies(framework);
+  updateConfigFile(framework);
+  await addScript(framework);
+  addVSCodeSettings();
+  updateVSCodeExtensionsFile();
 };
 
 export const ESLint = new Tool.Builder()

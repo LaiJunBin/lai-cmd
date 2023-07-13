@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@types/prompts':
     specifier: ^2.4.4
@@ -21,6 +25,9 @@ devDependencies:
   '@vitest/coverage-v8':
     specifier: ^0.32.2
     version: 0.32.2(vitest@0.32.2)
+  config-parser-master:
+    specifier: ^0.1.0
+    version: 0.1.0
   eslint:
     specifier: ^8.0.1
     version: 8.43.0
@@ -1133,6 +1140,10 @@ packages:
       md5-hex: 3.0.1
       semver: 7.5.2
       well-known-symbols: 2.0.0
+    dev: true
+
+  /config-parser-master@0.1.0:
+    resolution: {integrity: sha512-NXTY/X41okqS2G5epXkF84R+GKtw3e/+que9PiodX0eXC876s+kLldW+cyAYqb1uQ9gpzod7I0VcMyrayRK+qg==}
     dev: true
 
   /convert-source-map@1.9.0:
@@ -3369,7 +3380,3 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
