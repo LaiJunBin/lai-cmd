@@ -11,4 +11,8 @@ export class Vue extends Framework {
     const tools = [ESLint, Prettier, Husky, LintStaged, Tailwind];
     super(packageManager, tools);
   }
+
+  static async check(): Promise<boolean> {
+    return await PackageManager.isInstalled('vue');
+  }
 }

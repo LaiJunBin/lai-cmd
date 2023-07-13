@@ -1,14 +1,7 @@
 import prompts from 'prompts';
-import { Framework } from '../../models/frameworks/framework';
-import { Svelte } from '../../models/frameworks/svelte/svelte';
+import { Framework } from '../../models/frameworks';
 import { getInitialPackageManager } from '../../utils/get-initial-package-manager';
-import { React } from '../../models/frameworks/react/react';
-import { Vue } from '../../models/frameworks/vue/vue';
-import { Others } from '../../models/frameworks/others/others';
-import {
-  PackageManager,
-  initialPackageManager,
-} from '../../models/package-manager';
+import { PackageManager } from '../../models/package-manager';
 
 async function selectPackageManager(): Promise<PackageManager> {
   const choices = PackageManager.list().map((type) => ({
@@ -36,6 +29,14 @@ async function selectPackageManager(): Promise<PackageManager> {
 }
 
 async function selectFramework(): Promise<typeof Framework> {
+  const choices = Framework.list().map((type) => ({
+    title: type,
+    value: Framework.get(type),
+  }));
+
+  const checks = Promise.all(choices.map((choice) => choice.value.check()));
+  const initial = (await checks).findIndex((check) => check);
+
   const {
     framework,
   }: {
@@ -44,22 +45,19 @@ async function selectFramework(): Promise<typeof Framework> {
     type: 'select',
     name: 'framework',
     message: 'Which framework do you use?',
-    choices: [
-      { title: 'Vue', value: Vue },
-      { title: 'React', value: React },
-      { title: 'Svelte', value: Svelte },
-      { title: 'None of the above', value: Others },
-    ],
+    choices,
+    initial,
   });
 
   return framework;
 }
 
 export const initAction = async () => {
-  initialPackageManager();
-
   const packageManager = await selectPackageManager();
   const framework = await selectFramework();
+  if (framework === undefined) {
+    return;
+  }
   const frameworkInstance = new framework(packageManager);
   frameworkInstance.install();
 };

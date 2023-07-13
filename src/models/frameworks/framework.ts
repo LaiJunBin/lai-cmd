@@ -6,6 +6,7 @@ export class Framework {
   protected _packageManager: PackageManager;
   protected _toolsToBeInstalled: Tool[];
   protected tools: Tool[] = [];
+  private static frameworks: { [key: string]: typeof Framework } = {};
 
   get packageManager(): PackageManager {
     return this._packageManager;
@@ -13,6 +14,22 @@ export class Framework {
 
   get toolsToBeInstalled(): Tool[] {
     return this._toolsToBeInstalled;
+  }
+
+  static list() {
+    return Object.keys(this.frameworks);
+  }
+
+  static get(name: string) {
+    return this.frameworks[name];
+  }
+
+  static register(name: string, framework: typeof Framework) {
+    Framework.frameworks[name] = framework;
+  }
+
+  static async check(): Promise<boolean> {
+    return true;
   }
 
   constructor(packageManager: PackageManager, tools: Tool[] = []) {
@@ -51,8 +68,8 @@ export class Framework {
     }
 
     this._toolsToBeInstalled = toolsToBeInstalled;
-    this._toolsToBeInstalled.forEach(async (tool) => {
+    for (const tool of this._toolsToBeInstalled) {
       await tool.install(this);
-    });
+    }
   }
 }
