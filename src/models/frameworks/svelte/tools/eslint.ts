@@ -57,7 +57,9 @@ async function updateConfigFile(framework: Framework) {
     const index = configExtends.indexOf('standard-with-typescript');
     if (index !== -1) {
       configExtends.splice(index, 1, 'plugin:@typescript-eslint/recommended');
-    } else {
+    } else if (
+      !configExtends.includes('plugin:@typescript-eslint/recommended')
+    ) {
       configExtends.push('plugin:@typescript-eslint/recommended');
     }
   }
@@ -87,11 +89,18 @@ function addVSCodeSettings() {
     'eslint.options': {
       extensions: ['.svelte'],
     },
+    'editor.codeActionsOnSave': {
+      'source.fixAll.eslint': true,
+    },
   };
   const vscodeSettingsFile = getVSCodeSettingsFileName();
   const config = ConfigParser.parse(vscodeSettingsFile);
-  config.put('eslint.validate', settings['eslint.validate']);
-  config.put('eslint.options', settings['eslint.options']);
+  config.put(`"eslint.validate"`, settings['eslint.validate']);
+  config.put(`"eslint.options"`, settings['eslint.options']);
+  config.put(
+    `"editor.codeActionsOnSave"`,
+    settings['editor.codeActionsOnSave']
+  );
   config.save();
 }
 

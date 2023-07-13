@@ -26,8 +26,8 @@ devDependencies:
     specifier: ^0.32.2
     version: 0.32.2(vitest@0.32.2)
   config-parser-master:
-    specifier: ^0.1.0
-    version: 0.1.0
+    specifier: 0.1.1
+    version: 0.1.1
   eslint:
     specifier: ^8.0.1
     version: 8.43.0
@@ -1145,8 +1145,8 @@ packages:
       well-known-symbols: 2.0.0
     dev: true
 
-  /config-parser-master@0.1.0:
-    resolution: {integrity: sha512-NXTY/X41okqS2G5epXkF84R+GKtw3e/+que9PiodX0eXC876s+kLldW+cyAYqb1uQ9gpzod7I0VcMyrayRK+qg==}
+  /config-parser-master@0.1.1:
+    resolution: {integrity: sha512-i4SJO0Fl/wc0Rn0ASAMf6Tx2v0VSycIHbV6IvFlgpG5M76zWM7crIpE4UZe9c7kimNMnbht1FCuEzmfPzZXOpg==}
     dev: true
 
   /convert-source-map@1.9.0:
