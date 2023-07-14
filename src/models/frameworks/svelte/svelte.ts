@@ -5,10 +5,18 @@ import { Prettier } from './tools/prettier';
 import { Husky } from './tools/husky';
 import { LintStaged } from './tools/lintstaged';
 import { Tailwind } from './tools/tailwind';
+import { TestingLibrary } from './tools/testing-library';
 
 export class Svelte extends Framework {
   constructor(packageManager: PackageManager) {
-    const tools = [ESLint, Prettier, Husky, LintStaged, Tailwind];
+    const tools = [
+      ESLint,
+      Prettier,
+      Husky,
+      LintStaged,
+      Tailwind,
+      TestingLibrary,
+    ];
     super(packageManager, tools);
   }
 
