@@ -62,6 +62,18 @@ async function updateConfigFile(framework: Framework) {
     ) {
       configExtends.push('plugin:@typescript-eslint/recommended');
     }
+
+    const overrides = config.get('overrides', []) as Array<any>;
+    if (!overrides.find((override) => override.files === '*.svelte')) {
+      overrides.push({
+        files: ['*.svelte'],
+        parser: 'svelte-eslint-parser',
+        parserOptions: {
+          parser: '@typescript-eslint/parser',
+        },
+      });
+    }
+    config.put('overrides', overrides);
   }
 
   config.put('extends', configExtends);
