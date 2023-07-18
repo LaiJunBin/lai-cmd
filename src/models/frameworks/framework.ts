@@ -69,6 +69,7 @@ export class Framework {
 
     this._toolsToBeInstalled = toolsToBeInstalled;
     for (const tool of this._toolsToBeInstalled) {
+      if (tool.promptChoice.disabled) continue;
       await tool.install(this);
     }
   }
