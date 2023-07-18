@@ -6,6 +6,7 @@ import { Husky } from './tools/husky';
 import { LintStaged } from './tools/lintstaged';
 import { Tailwind } from './tools/tailwind';
 import { TestingLibrary } from './tools/testing-library';
+import { MSW } from './tools/msw/msw';
 
 export class Svelte extends Framework {
   constructor(packageManager: PackageManager) {
@@ -16,6 +17,7 @@ export class Svelte extends Framework {
       LintStaged,
       Tailwind,
       TestingLibrary,
+      MSW,
     ];
     super(packageManager, tools);
   }
