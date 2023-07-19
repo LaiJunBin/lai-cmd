@@ -63,8 +63,8 @@ async function updateConfigFile(framework: Framework) {
       configExtends.push('plugin:@typescript-eslint/recommended');
     }
 
-    const overrides = config.get('overrides', []) as Array<any>;
-    if (!overrides.find((override) => override.files === '*.svelte')) {
+    const overrides = config.get('overrides', []);
+    if (!overrides.find((override) => override.files.includes('*.svelte'))) {
       overrides.push({
         files: ['*.svelte'],
         parser: 'svelte-eslint-parser',
