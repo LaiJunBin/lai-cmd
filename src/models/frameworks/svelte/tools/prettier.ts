@@ -12,14 +12,14 @@ import { green, yellow } from 'kolorist';
 
 async function installDependencies(framework: Framework) {
   console.log(green('Install Prettier and Prettier Svelte plugin'));
-  const installedPackages = ['prettier@2', 'prettier-plugin-svelte'];
+  const installedPackages = ['prettier@^2', 'prettier-plugin-svelte@^2'];
   await framework.packageManager.install(installedPackages, true);
 }
 
 async function installDependenciesForESLint(framework: Framework) {
   console.log(green('Install ESLint Prettier plugin'));
   const installedPackages = [
-    'eslint-plugin-prettier@4',
+    'eslint-plugin-prettier@^4',
     'eslint-config-prettier',
   ];
   await framework.packageManager.install(installedPackages, true);
