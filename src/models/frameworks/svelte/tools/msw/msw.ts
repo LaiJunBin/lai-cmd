@@ -38,7 +38,11 @@ export const handlers = [
 
 const install = async (framework: Framework) => {
   console.log(green('MSW install'));
-  framework.packageManager.install(['msw'], true);
+  await framework.packageManager.install(['msw'], true);
+  if (framework.toolsToBeInstalled.includes(MSWX)) {
+    console.log(yellow('MSWX will be installed, skip setup handlers for MSW'));
+    return;
+  }
   await setupHandler();
 };
 

@@ -40,7 +40,7 @@ export const handlers = [
 
 const install = async (framework: Framework) => {
   console.log(green('MSWX install'));
-  framework.packageManager.install(['mswx'], true);
+  await framework.packageManager.install(['mswx'], true);
   await setupHandler();
 };
 
