@@ -12,10 +12,10 @@ async function installDependencies(framework: Framework) {
   await framework.packageManager.install(dependencies, true);
 }
 
-function getScriptConfigFile() {
+async function getScriptConfigFile() {
   if (
     fs.existsSync('tsconfig.json') ||
-    PackageManager.isInstalled('typescript')
+    (await PackageManager.isInstalled('typescript'))
   ) {
     return 'tsconfig.json';
   }
@@ -25,7 +25,7 @@ function getScriptConfigFile() {
 
 async function updateConfigFile(framework: Framework) {
   console.log(green('testing-library updateConfigFile'));
-  const configFile = getScriptConfigFile();
+  const configFile = await getScriptConfigFile();
   if (!fs.existsSync(configFile)) {
     console.log(yellow(`Cannot find ${configFile}, so create it.`));
     fs.writeFileSync(configFile, '{}');
@@ -97,10 +97,10 @@ async function updateConfigFile(framework: Framework) {
   }
 }
 
-function getVitestConfigFile() {
+async function getVitestConfigFile() {
   if (
     fs.existsSync('vitest.config.ts') ||
-    PackageManager.isInstalled('typescript')
+    (await PackageManager.isInstalled('typescript'))
   ) {
     return 'vitest.config.ts';
   }
@@ -118,7 +118,7 @@ async function updateVitestConfigFile(framework: Framework) {
     },
   };
 
-  const vitestConfigFile = getVitestConfigFile();
+  const vitestConfigFile = await getVitestConfigFile();
   if (!fs.existsSync(vitestConfigFile)) {
     console.log(yellow(`Cannot find ${vitestConfigFile}, so create it.`));
     fs.writeFileSync(
