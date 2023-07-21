@@ -141,6 +141,12 @@ export default defineConfig({});`
   config.put('test.globals', addConfig.test.globals);
 
   const plugins = config.get('plugins', []);
+
+  if (plugins.some((plugin) => config.isSameCallExpression(plugin, 'svelte'))) {
+    console.log(yellow('svelte plugin already exists, skip'));
+    return;
+  }
+
   config.import('@sveltejs/vite-plugin-svelte', {
     keys: ['svelte'],
   });

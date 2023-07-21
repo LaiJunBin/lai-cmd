@@ -4,6 +4,7 @@ import { PackageManager } from '../../../../package-manager';
 import fs from 'fs';
 import { getDevLanguage, writeFileSync } from '../../../../../utils';
 import { green, yellow } from 'kolorist';
+import { ConfigParser } from 'config-parser-master';
 
 const setupWorker = async () => {
   console.log(green('setup worker'));
@@ -62,6 +63,13 @@ const setupSvelteEntryFile = async () => {
   const extension = await getDevLanguage();
   const filename = `./src/main.${extension}`;
 
+  if (
+    ConfigParser.parseJs(filename, true).isContainCallExpression('worker.start')
+  ) {
+    console.log(yellow('svelte entry file already setup, skip setup'));
+    return;
+  }
+
   const source = `import { worker } from './mocks/browser';
 
 if (process.env.NODE_ENV === 'development') {
@@ -75,10 +83,6 @@ if (process.env.NODE_ENV === 'development') {
 }
   `;
   const lines = fs.readFileSync(filename).toString().split('\n');
-  if (lines.some((line) => line.includes('worker.start'))) {
-    console.log(yellow('svelte entry file already setup, skip setup'));
-    return;
-  }
   const lastImportIndex = lines.findIndex((line) => line.startsWith('import'));
   lines.splice(lastImportIndex + 1, 0, source);
   writeFileSync(filename, lines.join('\n'));
