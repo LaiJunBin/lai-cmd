@@ -2,7 +2,6 @@ import { Framework } from '../../../framework';
 import { Tool } from '../../../../tool';
 import { getDevLanguage, writeFileSync } from '../../../../../utils';
 import { green, yellow } from 'kolorist';
-import { PackageManager } from '../../../../package-manager';
 import fs from 'fs';
 
 const setupServerFile = async () => {
@@ -22,32 +21,9 @@ export const server = setupServer(...handlers)
   writeFileSync(filename, source);
 };
 
-const setupSveltekitEntryFile = async () => {
-  console.log(green('setup sveltekit server entry file'));
-  const extension = await getDevLanguage();
-  const filename = `./src/hooks.server.${extension}`;
-  if (fs.existsSync(filename)) {
-    console.log(
-      yellow('sveltekit server entry file already exists, skip setup')
-    );
-    return;
-  }
-  const source = `import { server } from './mocks/server.js'
-
-if (process.env.NODE_ENV === 'development') {
-  server.listen();
-}
-  `;
-  writeFileSync(filename, source);
-};
-
 const install = async (framework: Framework) => {
   console.log(green('MSW node install'));
   await setupServerFile();
-
-  if (await PackageManager.isInstalled('@sveltejs/kit')) {
-    return await setupSveltekitEntryFile();
-  }
 
   console.log(yellow('Uncertain which entry file to setup'));
   console.log(

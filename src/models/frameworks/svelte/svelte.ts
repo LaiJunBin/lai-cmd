@@ -5,7 +5,7 @@ import { Prettier } from './tools/prettier';
 import { Husky } from './tools/husky';
 import { LintStaged } from './tools/lintstaged';
 import { Tailwind } from './tools/tailwind';
-import { TestingLibrary } from './tools/testing-library';
+import { TestingLibrary } from './tools/testing-library/testing-library';
 import { MSW } from './tools/msw/msw';
 
 export class Svelte extends Framework {
@@ -23,6 +23,9 @@ export class Svelte extends Framework {
   }
 
   static async check(): Promise<boolean> {
-    return await PackageManager.isInstalled('svelte');
+    return (
+      (await PackageManager.isInstalled('svelte')) &&
+      !(await PackageManager.isInstalled('@sveltejs/kit'))
+    );
   }
 }

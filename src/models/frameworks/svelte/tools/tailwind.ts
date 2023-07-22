@@ -44,23 +44,26 @@ function updateConfigFile() {
 }
 
 async function updateCss() {
-  console.log(green('Update index.css file'));
-  const defaultCssPath = './src/index.css';
-  const result = await prompts({
-    type: 'text',
-    name: 'cssPath',
-    message: 'Please input index.css path',
-    initial: defaultCssPath,
-  });
-
-  let cssPath = result.cssPath;
+  let cssPath = './src/app.css';
+  console.log(green(`Update css file, try to update ${cssPath}`));
   if (!fs.existsSync(cssPath)) {
-    cssPath = defaultCssPath;
+    console.log(yellow(`${cssPath} not found, please input css path`));
+    const defaultCssPath = './src/index.css';
+    const result = await prompts({
+      type: 'text',
+      name: 'cssPath',
+      message: 'Please input index.css path',
+      initial: defaultCssPath,
+    });
+    cssPath = result.cssPath;
+  }
+
+  if (!fs.existsSync(cssPath)) {
+    console.log(yellow(`${cssPath} not found, create it`));
     fs.writeFileSync(cssPath, '');
   }
 
-  const file = cssPath;
-  const cssContent = fs.readFileSync(file).toString();
+  const cssContent = fs.readFileSync(cssPath).toString();
   if (cssContent.includes('@tailwind')) {
     console.log(yellow('TailwindCSS already included in index.css, skip'));
     return;
@@ -73,7 +76,7 @@ async function updateCss() {
 ${cssContent}
 `;
 
-  fs.writeFileSync(file, data);
+  fs.writeFileSync(cssPath, data);
 }
 
 async function installPrettierPlugin(framework: Framework) {

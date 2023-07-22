@@ -8,12 +8,7 @@ import { ConfigParser } from 'config-parser-master';
 
 const setupWorker = async () => {
   console.log(green('setup worker'));
-  let directory = './public';
-  if (await PackageManager.isInstalled('@sveltejs/kit')) {
-    directory = './static';
-  }
-
-  return await PackageManager.npx(['msw init', directory]);
+  return await PackageManager.npx(['msw init', './public']);
 };
 
 const setupBrowserFile = async () => {
@@ -33,33 +28,8 @@ export const worker = setupWorker(...handlers)
   writeFileSync(filename, source);
 };
 
-const setupSveltekitEntryFile = async () => {
-  console.log(green('setup sveltekit client entry file'));
-  const extension = await getDevLanguage();
-  const filename = `./src/hooks.client.${extension}`;
-  if (fs.existsSync(filename)) {
-    console.log(
-      yellow('sveltekit browser entry file already exists, skip setup')
-    );
-    return;
-  }
-  const source = `import { worker } from './mocks/browser';
-
-if (process.env.NODE_ENV === 'development') {
-  worker.start({
-    onUnhandledRequest: ({ url }, print) => {
-      if (url.pathname.startsWith('/api')) {
-        print.warning();
-      }
-    }
-  });
-}
-  `;
-  writeFileSync(filename, source);
-};
-
-const setupSvelteEntryFile = async () => {
-  console.log(green('setup svelte client entry file'));
+const setupEntryFile = async () => {
+  console.log(green('setup entry file'));
   const extension = await getDevLanguage();
   const filename = `./src/main.${extension}`;
 
@@ -86,15 +56,6 @@ if (process.env.NODE_ENV === 'development') {
   const lastImportIndex = lines.findIndex((line) => line.startsWith('import'));
   lines.splice(lastImportIndex + 1, 0, source);
   writeFileSync(filename, lines.join('\n'));
-};
-
-const setupEntryFile = async () => {
-  console.log(green('setup entry file'));
-  if (await PackageManager.isInstalled('@sveltejs/kit')) {
-    await setupSveltekitEntryFile();
-  } else {
-    await setupSvelteEntryFile();
-  }
 };
 
 const install = async (framework: Framework) => {

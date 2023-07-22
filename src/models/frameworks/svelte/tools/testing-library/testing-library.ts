@@ -1,10 +1,10 @@
-import { Framework } from '../../framework';
-import { Tool } from '../../../tool';
-import { green, yellow, red } from 'kolorist';
+import { Framework } from '../../../framework';
+import { Tool } from '../../../../tool';
+import { green, yellow } from 'kolorist';
 import fs from 'fs';
-import { PackageManager } from '../../../package-manager';
+import { PackageManager } from '../../../../package-manager';
 import { ConfigParser } from 'config-parser-master';
-import prompts from 'prompts';
+import { Example } from './example';
 
 async function installDependencies(framework: Framework) {
   console.log(green('testing-library installDependencies'));
@@ -31,68 +31,11 @@ async function updateConfigFile(framework: Framework) {
     fs.writeFileSync(configFile, '{}');
   }
 
-  let config = null;
-  try {
-    config = ConfigParser.parse(configFile);
-  } catch (e) {
-    console.log(red(`Cannot parse ${configFile}.`));
-    const { forceParse } = await prompts({
-      type: 'toggle',
-      name: 'forceParse',
-      message: 'Would you like to force parse it? (comments will be removed)',
-      active: 'yes',
-      inactive: 'no',
-      initial: true,
-    });
-
-    if (!forceParse) {
-      console.log(
-        yellow(`Cannot parse ${configFile}, please handle it manually.`)
-      );
-
-      console.log(
-        yellow(
-          `Add "vitest/globals" to "compilerOptions.types" in ${configFile}.`
-        )
-      );
-
-      console.log(
-        yellow(`Example: "compilerOptions": { "types": ["vitest/globals"] }`)
-      );
-      return;
-    }
-
-    const jsonString = fs
-      .readFileSync(configFile)
-      .toString()
-      .replace(/\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g, (m, g) =>
-        g ? '' : m
-      );
-    fs.writeFileSync(configFile, jsonString);
-    try {
-      config = ConfigParser.parse(configFile);
-      console.log(green(`Force parse ${configFile} successfully.`));
-    } catch (e) {
-      console.log(red(`Cannot parse ${configFile}.`));
-      console.log(
-        yellow(
-          `Add "vitest/globals" to "compilerOptions.types" in ${configFile}.`
-        )
-      );
-
-      console.log(
-        yellow(`Example: "compilerOptions": { "types": ["vitest/globals"] }`)
-      );
-      return;
-    }
-  }
-
-  const compilerOptions = config.get('compilerOptions', {});
-  const types = compilerOptions.types || [];
+  const config = ConfigParser.parse(configFile);
+  const types = config.get('compilerOptions.types', []);
   if (!types.includes('vitest/globals')) {
     types.push('vitest/globals');
-    compilerOptions.types = types;
-    config.put('compilerOptions', compilerOptions);
+    config.put('compilerOptions.types', types);
     config.save();
   }
 }
@@ -173,4 +116,5 @@ export const TestingLibrary = new Tool.Builder()
   .setPromptChoice({
     title: 'Testing Library',
   })
+  .setChildren([Example])
   .build();
