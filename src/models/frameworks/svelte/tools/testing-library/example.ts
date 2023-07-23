@@ -2,6 +2,7 @@ import { green } from 'kolorist';
 import { Tool } from '../../../../tool';
 import { Framework } from '../../../framework';
 import fs from 'fs';
+import { getDevLanguage } from '../../../../../utils';
 
 const install = async (framework: Framework) => {
   console.log(green('Add testing-library example'));
@@ -14,7 +15,8 @@ test('render title', () => {
 })
 `;
 
-  const filename = `./src/App.test.js`;
+  const devLanguage = await getDevLanguage();
+  const filename = `./src/App.test.${devLanguage}`;
   if (fs.existsSync(filename)) {
     console.log(green(`${filename} already exists, skip`));
     return;
