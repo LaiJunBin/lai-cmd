@@ -28,14 +28,33 @@ async function selectPackageManager(): Promise<PackageManager> {
   return packageManager;
 }
 
-async function selectFramework(): Promise<typeof Framework> {
+async function getInitialFrameworkIndex(): Promise<number> {
+  const choices = Framework.list()
+    .map((type) => ({
+      title: type,
+      value: Framework.get(type),
+    }))
+    .slice(0, -1);
+
+  const checks = choices.map(
+    (choice, i) =>
+      new Promise<{
+        res: boolean;
+        i: number;
+      }>((resolve, reject) =>
+        choice.value.check().then((res) => res && resolve({ res, i }), reject)
+      )
+  );
+  checks.push(Promise.all(checks).then(() => ({ res: false, i: -1 })));
+  const initial = (await Promise.race(checks)).i;
+  return initial;
+}
+
+async function selectFramework(initial: number): Promise<typeof Framework> {
   const choices = Framework.list().map((type) => ({
     title: type,
     value: Framework.get(type),
   }));
-
-  const checks = Promise.all(choices.map((choice) => choice.value.check()));
-  const initial = (await checks).findIndex((check) => check);
 
   const {
     framework,
@@ -53,8 +72,11 @@ async function selectFramework(): Promise<typeof Framework> {
 }
 
 export const initAction = async () => {
+  const getInitialFrameworkIndexPromise = getInitialFrameworkIndex();
   const packageManager = await selectPackageManager();
-  const framework = await selectFramework();
+  const framework = await selectFramework(
+    await getInitialFrameworkIndexPromise
+  );
   if (framework === undefined) {
     return;
   }
