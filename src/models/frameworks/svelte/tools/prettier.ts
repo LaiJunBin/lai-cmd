@@ -7,7 +7,10 @@ import {
 } from '../../../../utils/eslint';
 import { ConfigParser } from 'config-parser-master';
 import fs from 'fs';
-import { addVSCodeExtensionsToRecommendations } from '../../../../utils/vscode';
+import {
+  addVSCodeExtensionsToRecommendations,
+  getVSCodeSettingsFileName,
+} from '../../../../utils/vscode';
 import { green, yellow } from 'kolorist';
 
 async function installDependencies(framework: Framework) {
@@ -107,6 +110,26 @@ function updateVSCodeExtensionsFile() {
   addVSCodeExtensionsToRecommendations(extensions);
 }
 
+function updateVSCodeSettings() {
+  console.log(green('Update VSCode settings'));
+  const settings = {
+    '[jsonc]': {
+      'editor.defaultFormatter': 'esbenp.prettier-vscode',
+      'editor.formatOnSave': true,
+    },
+    '"files.associations"': {
+      '*.json': 'jsonc',
+      '.*rc': 'jsonc',
+    },
+  };
+  const vscodeSettingsFile = getVSCodeSettingsFileName();
+  const config = ConfigParser.parse(vscodeSettingsFile);
+  Object.keys(settings).forEach((key) => {
+    config.put(key, settings[key]);
+  });
+  config.save();
+}
+
 const install = async (framework: Framework) => {
   console.log(green('Prettier install'));
   await installDependencies(framework);
@@ -121,6 +144,7 @@ const install = async (framework: Framework) => {
   updatePrettierConfigFile();
   await addScript(framework);
   updateVSCodeExtensionsFile();
+  updateVSCodeSettings();
 };
 
 export const Prettier = new Tool.Builder()
