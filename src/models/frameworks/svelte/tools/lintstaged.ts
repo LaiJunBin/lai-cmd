@@ -8,6 +8,8 @@ import { existESLintConfigFiles } from '../../../../utils/eslint';
 import { green, yellow } from 'kolorist';
 import fs from 'fs';
 import { ConfigParser } from 'config-parser-master';
+import { StyleLint } from './stylelint';
+import { existStyleLintConfigFiles } from '../../../../utils/stylelint';
 
 const install = async (framework: Framework) => {
   console.log('lintstage install');
@@ -40,6 +42,15 @@ const install = async (framework: Framework) => {
   fs.writeFileSync(configFile, '{}');
   const config = ConfigParser.parse(configFile);
   config.put('"src/**/*.{ts,js,json,md}"', commands);
+
+  if (
+    framework.toolsToBeInstalled.includes(StyleLint) ||
+    existStyleLintConfigFiles()
+  ) {
+    console.log(green('add stylelint command to lint-staged config'));
+    config.put('"src/**/*.{css,scss}"', ['stylelint --fix']);
+  }
+
   config.save();
 };
 
