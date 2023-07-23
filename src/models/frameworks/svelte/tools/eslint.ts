@@ -83,7 +83,7 @@ async function updateConfigFile(framework: Framework) {
 
 async function addScript(framework: Framework) {
   console.log(green('Add lint script'));
-  if (framework.packageManager.hasScript('lint')) {
+  if (await framework.packageManager.hasScript('lint')) {
     console.log(yellow('Lint script already exists, skip adding'));
     return;
   }

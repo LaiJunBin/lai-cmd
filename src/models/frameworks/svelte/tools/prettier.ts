@@ -94,7 +94,7 @@ function updatePrettierConfigFile() {
 
 async function addScript(framework: Framework) {
   console.log(green('Add format script'));
-  if (framework.packageManager.hasScript('format')) {
+  if (await framework.packageManager.hasScript('format')) {
     console.log(yellow('Format script already exists, skip'));
     return;
   }
