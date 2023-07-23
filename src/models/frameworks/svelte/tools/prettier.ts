@@ -76,7 +76,7 @@ function updatePrettierConfigFile() {
   }
   config.put('plugins', plugins);
 
-  const overrides = config.get('overrides', []) as Array<any>;
+  const overrides = config.get('overrides', []);
   if (!overrides.find((override) => override.files === '*.svelte')) {
     overrides.push({
       files: '*.svelte',
