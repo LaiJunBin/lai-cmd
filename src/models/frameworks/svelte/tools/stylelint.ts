@@ -11,6 +11,8 @@ import {
 import { green, yellow } from 'kolorist';
 import { getStyleLintConfigFileName } from '../../../../utils/stylelint';
 import { existTailwindConfigFiles } from '../../../../utils/tailwind';
+import { Prettier } from './prettier';
+import { Tailwind } from './tailwind';
 
 async function installDependencies(framework: Framework) {
   console.log(green('Install StyleLint and StyleLint plugins'));
@@ -129,12 +131,18 @@ const install = async (framework: Framework) => {
   await installDependencies(framework);
   updateStyleLintConfigFile();
 
-  if (existPrettierConfigFiles()) {
+  if (
+    framework.toolsToBeInstalled.includes(Prettier) ||
+    existPrettierConfigFiles()
+  ) {
     console.log(yellow('Prettier config file found, install Prettier plugin'));
     await installPrettierPlugin(framework);
     updateStyleLintConfigForPrettier();
   }
-  if (existTailwindConfigFiles()) {
+  if (
+    framework.toolsToBeInstalled.includes(Tailwind) ||
+    existTailwindConfigFiles()
+  ) {
     console.log(
       yellow('TailwindCSS config file found, update stylelint config')
     );
