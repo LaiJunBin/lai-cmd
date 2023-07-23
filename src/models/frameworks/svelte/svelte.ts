@@ -7,12 +7,14 @@ import { LintStaged } from './tools/lintstaged';
 import { Tailwind } from './tools/tailwind';
 import { TestingLibrary } from './tools/testing-library/testing-library';
 import { MSW } from './tools/msw/msw';
+import { StyleLint } from './tools/stylelint';
 
 export class Svelte extends Framework {
   constructor(packageManager: PackageManager) {
     const tools = [
       ESLint,
       Prettier,
+      StyleLint,
       Husky,
       LintStaged,
       Tailwind,
