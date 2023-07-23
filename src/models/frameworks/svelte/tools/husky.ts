@@ -4,6 +4,8 @@ import { Tool } from '../../../tool';
 import { PackageManager } from '../../../package-manager';
 import { green, red, yellow } from 'kolorist';
 import { InitGit, checkGit } from '../../../../utils/git';
+import { existLintStagedConfigFiles } from '../../../../utils/exist-lintstage-config-files';
+import { LintStaged } from './lintstaged';
 
 const install = async (framework: Framework) => {
   console.log(green('husky install'));
@@ -24,13 +26,16 @@ const install = async (framework: Framework) => {
   await PackageManager.npx(['husky', 'install']);
   console.log(green('npm set-script prepare "husky install"'));
   await framework.packageManager.addScript('prepare', 'husky install');
-  console.log(green('husky add .husky/pre-commit "echo pre-commit"'));
-  await PackageManager.npx([
-    'husky',
-    'add',
-    '.husky/pre-commit',
-    '"echo pre-commit"',
-  ]);
+
+  let preCommitCmd = '"echo pre-commit"';
+  if (
+    framework.toolsToBeInstalled.includes(LintStaged) ||
+    existLintStagedConfigFiles()
+  ) {
+    preCommitCmd = '"npx lint-staged"';
+  }
+  console.log(green(`husky add .husky/pre-commit ${preCommitCmd}`));
+  await PackageManager.npx(['husky', 'add', '.husky/pre-commit', preCommitCmd]);
   console.log(green('husky install done'));
 };
 
