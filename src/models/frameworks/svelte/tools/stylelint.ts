@@ -31,10 +31,7 @@ async function installDependencies(framework: Framework) {
 async function installPrettierPlugin(framework: Framework) {
   console.log(green('Install StyleLint Prettier plugin'));
 
-  await framework.packageManager.install(
-    ['stylelint-config-prettier', 'stylelint-prettier@^3'],
-    true
-  );
+  await framework.packageManager.install(['stylelint-prettier@^3'], true);
 }
 
 function updateStyleLintConfigFile() {
@@ -70,9 +67,7 @@ function updateStyleLintConfigForPrettier() {
     const index = extendsValues.indexOf('stylelint-config-recess-order');
     extendsValues.splice(index, 0, 'stylelint-prettier/recommended');
   }
-  if (!extendsValues.includes('stylelint-config-prettier')) {
-    extendsValues.push('stylelint-config-prettier');
-  }
+
   config.put('extends', extendsValues);
   config.save();
 }
