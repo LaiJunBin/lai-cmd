@@ -12,7 +12,14 @@ import { StyleLint } from './stylelint';
 import { existStyleLintConfigFiles } from '../../../../utils/stylelint';
 
 const install = async (framework: Framework) => {
-  console.log('lintstage install');
+  console.log(green('lintstage install'));
+
+  const configFile = '.lintstagedrc';
+  console.log(green('create lint-staged config'));
+  fs.writeFileSync(configFile, '{}');
+
+  console.log(green('check commands to be executed'));
+  const config = ConfigParser.parse(configFile);
   const commands = [];
 
   if (
@@ -22,35 +29,37 @@ const install = async (framework: Framework) => {
     commands.push('eslint --fix');
   }
 
-  if (commands.length === 0) {
-    console.log(yellow('No commands to be executed, skip lintstage install'));
-    return;
-  }
-
   if (
     framework.toolsToBeInstalled.includes(Prettier) ||
     existPrettierConfigFiles()
   ) {
     commands.push('prettier --write');
+    config.put('".*rc"', ['prettier --write']);
+    config.put('"*.{html,md}"', ['prettier --write']);
   }
 
-  console.log(green('install dependencies'));
-  await framework.packageManager.install(['lint-staged'], true);
-
-  console.log(green('add lint-staged config'));
-  const configFile = '.lintstagedrc';
-  fs.writeFileSync(configFile, '{}');
-  const config = ConfigParser.parse(configFile);
-  config.put('"src/**/*.{ts,js,json,md}"', commands);
+  if (commands.length) {
+    config.put('"*.{ts,js,cjs,json,svelte}"', commands);
+  }
 
   if (
     framework.toolsToBeInstalled.includes(StyleLint) ||
     existStyleLintConfigFiles()
   ) {
-    console.log(green('add stylelint command to lint-staged config'));
     config.put('"src/**/*.{css,scss}"', ['stylelint --fix']);
   }
 
+  if (config.content === '{}') {
+    console.log(yellow('No commands to be executed, skip lintstage install'));
+    console.log(yellow('Remove empty lint-staged config file'));
+    fs.unlinkSync(configFile);
+    return;
+  }
+
+  console.log(green('install dependencies'));
+  await framework.packageManager.install(['lint-staged'], true);
+
+  console.log(green('save commands to lint-staged config'));
   config.save();
 };
 
