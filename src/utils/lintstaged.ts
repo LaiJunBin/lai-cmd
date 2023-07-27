@@ -35,7 +35,7 @@ export async function installLintStaged(framework: Framework) {
     existPrettierConfigFiles()
   ) {
     commands.push('prettier --write');
-    config.put('".*rc"', ['prettier --write']);
+    config.put('".*rc"', ['prettier --write --ignore-unknown']);
     config.put('"*.{html,md}"', ['prettier --write']);
   }
 
