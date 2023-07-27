@@ -78,3 +78,17 @@ export async function addVitestScript(framework: Framework) {
   }
   await framework.packageManager.addScript('test:unit', 'vitest');
 }
+
+export async function addSetupFiles(files: string[]) {
+  console.log(green('Add setupFiles to vitest config'));
+  const configFile = await getVitestConfigFile();
+  const config = ConfigParser.parse(configFile);
+  const setupFiles = config.get('test.setupFiles', []);
+  files.forEach((file) => {
+    if (!setupFiles.includes(file)) {
+      setupFiles.push(file);
+    }
+  });
+  config.put('test.setupFiles', setupFiles);
+  config.save();
+}

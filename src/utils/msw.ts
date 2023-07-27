@@ -148,7 +148,7 @@ if (import.meta.env.MODE === 'development') {
   writeFileSync(path, lines.join('\n'));
 }
 
-export function setupServerEntryFile(path = '') {
+export function setupTestsEntryFile(path: string) {
   const source = `import { server } from './mocks/server.js'
 // Establish API mocking before all tests.
 beforeAll(() => server.listen())
@@ -160,6 +160,30 @@ afterEach(() => server.resetHandlers())
 // Clean up after the tests are finished.
 afterAll(() => server.close())
     `;
+
+  if (!fs.existsSync(path)) {
+    console.log(yellow(`${path} not exist, create it.`));
+    writeFileSync(path, source);
+    return;
+  }
+
+  if (
+    ConfigParser.parseJs(path, true).isContainCallExpression('server.listen')
+  ) {
+    console.log(yellow(`${path} already setup, skip setup`));
+    return;
+  }
+
+  const lines = fs.readFileSync(path).toString().split('\n');
+  const lastImportIndex = lines.findIndex((line) => line.startsWith('import'));
+  lines.splice(lastImportIndex + 1, 0, source);
+  writeFileSync(path, lines.join('\n'));
+}
+
+export function setupServerEntryFile(path = '') {
+  const source = `import { server } from './mocks/server.js'
+
+server.listen()`;
   if (!path) {
     console.log(yellow('Uncertain which entry file to setup'));
     console.log(
