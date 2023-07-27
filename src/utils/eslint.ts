@@ -51,16 +51,13 @@ export async function addLintScript(
   );
 }
 
-export function updateVSCodeSettingsForESLint() {
+export function updateVSCodeSettingsForESLint(options = {}) {
   console.log(green('Update VSCode settings'));
   const settings = {
-    '"eslint.validate"': ['svelte'],
-    '"eslint.options"': {
-      extensions: ['.svelte'],
-    },
     '"editor.codeActionsOnSave"': {
       'source.fixAll.eslint': true,
     },
+    ...options,
   };
   putVSCodeSettings(settings);
 }

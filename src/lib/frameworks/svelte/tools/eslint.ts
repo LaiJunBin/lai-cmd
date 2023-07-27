@@ -77,7 +77,12 @@ const install = async (framework: Framework) => {
   await installDependencies(framework);
   await updateConfigFile(framework);
   await addLintScript(framework, ['ts', 'js', 'json', 'svelte']);
-  updateVSCodeSettingsForESLint();
+  updateVSCodeSettingsForESLint({
+    '"eslint.validate"': ['svelte'],
+    '"eslint.options"': {
+      extensions: ['.svelte'],
+    },
+  });
   updateVSCodeExtensionsFileForESLint();
 };
 
