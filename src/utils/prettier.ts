@@ -31,6 +31,8 @@ export async function installPrettierDependencies(
   dependencies: string[]
 ) {
   const installedPackages = ['prettier@^2', ...dependencies];
+  console.log(green('Install Prettier dependencies'));
+  console.log(installedPackages.join(', '));
   await framework.packageManager.install(installedPackages, true);
 }
 
