@@ -5,6 +5,7 @@ import { ConfigParser } from 'config-parser-master';
 import { green, yellow } from 'kolorist';
 import { getDevLanguage, writeFileSync, writeFileSyncIfNotExist } from '.';
 import { PackageManager } from '@/lib/package-manager';
+import prompts from 'prompts';
 
 export function checkMswIsInstalled(): boolean {
   const config = ConfigParser.parse('./package.json');
@@ -111,7 +112,7 @@ export const server = setupServer(...handlers)
   writeFileSync(filename, source);
 }
 
-export function setupBrowserEntryFile(path: string) {
+export async function setupBrowserEntryFile(path: string) {
   console.log(green(`setup entry file: (${path})`));
 
   const source = `import { worker } from './mocks/browser';
@@ -126,6 +127,18 @@ if (import.meta.env.MODE === 'development') {
   });
 }
   `;
+
+  if (!fs.existsSync(path)) {
+    console.log(yellow(`${path} not found, please input entry file path`));
+    const defaultPath = `./src/index.${getDevLanguage()}`;
+    const result = await prompts({
+      type: 'text',
+      name: 'path',
+      message: 'Please input entry file path',
+      initial: defaultPath,
+    });
+    path = result.path;
+  }
 
   if (!fs.existsSync(path)) {
     console.log(yellow('entry file not exist, create it.'));

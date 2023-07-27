@@ -37,7 +37,7 @@ export async function updateVitestConfigFile(): Promise<string> {
   console.log(green('testing-library updateVitestConfigFile'));
   const addConfig = {
     test: {
-      include: ['src/**/*.{test,spec}.{js,ts}'],
+      include: ['src/**/*.{test,spec}.{js,ts,jsx,tsx}'],
       environment: 'jsdom',
       globals: true,
     },

@@ -13,7 +13,7 @@ export const createBrowserTool = (directory: string, entryFile: string) => {
     console.log(green('MSW browser install'));
     await setupWorker(directory);
     setupBrowserFile();
-    setupBrowserEntryFile(entryFile);
+    await setupBrowserEntryFile(entryFile);
   };
 
   return new Tool.Builder()

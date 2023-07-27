@@ -36,11 +36,11 @@ export async function installLintStaged(framework: Framework) {
   ) {
     commands.push('prettier --write');
     config.put('".*rc"', ['prettier --write --ignore-unknown']);
-    config.put('"*.{html,md}"', ['prettier --write']);
+    config.put('"*.{html,md,json}"', ['prettier --write']);
   }
 
   if (commands.length) {
-    config.put('"*.{ts,js,cjs,json,svelte}"', commands);
+    config.put('"*.{ts,js,tsx,jsx,cjs,svelte}"', commands);
   }
 
   if (
