@@ -1,4 +1,4 @@
-import { Framework } from './frameworks/framework';
+import { Framework } from './framework';
 
 interface Choice {
   title: string;

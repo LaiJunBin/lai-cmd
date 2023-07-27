@@ -1,6 +1,6 @@
 import prompts from 'prompts';
 import { initAction } from '.';
-import { mockedStdout } from '../../test-utils';
+import { mockedStdout } from '@/test-utils';
 
 describe('test init cmd', () => {
   test.skip('test select project type', async () => {

@@ -1,7 +1,7 @@
 import prompts from 'prompts';
-import { Framework } from '../../models/frameworks';
-import { getInitialPackageManager } from '../../utils/get-initial-package-manager';
-import { PackageManager } from '../../models/package-manager';
+import { Framework } from '@/lib/frameworks';
+import { getInitialPackageManager } from '@/utils/package-manager';
+import { PackageManager } from '@/lib/package-manager';
 
 async function selectPackageManager(): Promise<PackageManager> {
   const choices = PackageManager.list().map((type) => ({

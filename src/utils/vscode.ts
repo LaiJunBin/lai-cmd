@@ -14,6 +14,15 @@ export function getVSCodeSettingsFileName() {
   return vscodeSettingsFile;
 }
 
+export function putVSCodeSettings(settings: Record<string, unknown>) {
+  const vscodeSettingsFile = getVSCodeSettingsFileName();
+  const config = ConfigParser.parse(vscodeSettingsFile);
+  for (const [key, value] of Object.entries(settings)) {
+    config.put(key, value);
+  }
+  config.save();
+}
+
 export function getVSCodeExtensionsFileName() {
   const vscodeExtensionsFile = '.vscode/extensions.json';
   if (!fs.existsSync('.vscode')) {
