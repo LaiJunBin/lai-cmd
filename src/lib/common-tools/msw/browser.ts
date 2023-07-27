@@ -8,12 +8,12 @@ import {
 } from '@/utils/msw';
 import { Tools } from '@/const/tools';
 
-export const createBrowserTool = (filename: string) => {
+export const createBrowserTool = (directory: string, entryFile: string) => {
   const install = async (framework: Framework) => {
     console.log(green('MSW browser install'));
-    await setupWorker();
+    await setupWorker(directory);
     setupBrowserFile();
-    setupBrowserEntryFile(filename);
+    setupBrowserEntryFile(entryFile);
   };
 
   return new Tool.Builder()

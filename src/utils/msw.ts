@@ -75,9 +75,9 @@ export const handlers = [
   writeFileSync(filename, source);
 }
 
-export async function setupWorker() {
+export async function setupWorker(directory: string) {
   console.log(green('setup worker'));
-  return await PackageManager.npx(['msw init', './public']);
+  return await PackageManager.npx(['msw init', directory]);
 }
 
 export function setupBrowserFile() {
@@ -114,16 +114,9 @@ export const server = setupServer(...handlers)
 export function setupBrowserEntryFile(path: string) {
   console.log(green(`setup entry file: (${path})`));
 
-  if (
-    ConfigParser.parseJs(path, true).isContainCallExpression('worker.start')
-  ) {
-    console.log(yellow('entry file already setup, skip setup'));
-    return;
-  }
-
   const source = `import { worker } from './mocks/browser';
 
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.MODE === 'development') {
   worker.start({
     onUnhandledRequest: ({ url }, print) => {
       if (url.pathname.startsWith('/api')) {
@@ -133,6 +126,20 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
   `;
+
+  if (!fs.existsSync(path)) {
+    console.log(yellow('entry file not exist, create it.'));
+    writeFileSync(path, source);
+    return;
+  }
+
+  if (
+    ConfigParser.parseJs(path, true).isContainCallExpression('worker.start')
+  ) {
+    console.log(yellow('entry file already setup, skip setup'));
+    return;
+  }
+
   const lines = fs.readFileSync(path).toString().split('\n');
   const lastImportIndex = lines.findLastIndex((line) =>
     line.startsWith('import')
