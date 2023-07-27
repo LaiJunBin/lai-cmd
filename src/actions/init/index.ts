@@ -36,17 +36,23 @@ async function getInitialFrameworkIndex(): Promise<number> {
     }))
     .slice(0, -1);
 
-  const checks = choices.map(
-    (choice, i) =>
+  const choicePromises = choices.map((choice) => choice.value.check());
+  const checks = choicePromises.map(
+    (check, i) =>
       new Promise<{
         res: boolean;
         i: number;
       }>((resolve, reject) =>
-        choice.value.check().then((res) => res && resolve({ res, i }), reject)
+        check.then((res) => res && resolve({ res, i }), reject)
       )
   );
-  checks.push(Promise.all(checks).then(() => ({ res: false, i: -1 })));
+  checks.push(Promise.all(choicePromises).then(() => ({ res: false, i: -1 })));
+
   const initial = (await Promise.race(checks)).i;
+  if (initial === -1) {
+    return choices.length;
+  }
+
   return initial;
 }
 
