@@ -18,7 +18,9 @@ async function updateVitestConfigFileForSvelte() {
   const config = ConfigParser.parseJs(vitestConfigFile);
   const plugins = config.get('plugins', []);
 
-  if (plugins.some((plugin) => config.isSameCallExpression(plugin, 'svelte'))) {
+  if (
+    plugins.some((plugin) => config.isSameCallExpression(plugin, 'svelte()'))
+  ) {
     console.log(yellow('svelte plugin already exists, skip'));
     return;
   }

@@ -134,7 +134,7 @@ if (import.meta.env.MODE === 'development') {
   }
 
   if (
-    ConfigParser.parseJs(path, true).isContainCallExpression('worker.start')
+    ConfigParser.parseJs(path, true).isContainCallExpression('worker.start()')
   ) {
     console.log(yellow('entry file already setup, skip setup'));
     return;
@@ -168,7 +168,7 @@ afterAll(() => server.close())
   }
 
   if (
-    ConfigParser.parseJs(path, true).isContainCallExpression('server.listen')
+    ConfigParser.parseJs(path, true).isContainCallExpression('server.listen()')
   ) {
     console.log(yellow(`${path} already setup, skip setup`));
     return;
@@ -205,7 +205,7 @@ server.listen()`;
   }
 
   if (
-    ConfigParser.parseJs(path, true).isContainCallExpression('server.listen')
+    ConfigParser.parseJs(path, true).isContainCallExpression('server.listen()')
   ) {
     console.log(yellow('entry file already setup, skip setup'));
     return;
