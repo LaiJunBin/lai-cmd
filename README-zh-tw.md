@@ -4,6 +4,7 @@
 
 [English](https://github.com/LaiJunBin/lai-cmd/tree/develop#lai-cmd)｜繁體中文
 
+---
 
 ## 使用方式:
 
@@ -20,8 +21,9 @@ $ npx lai-cmd@next init
 ### 選擇要裝的套件
 ![select-tools](./docs/images/select-tools.png)
 
-## 支援安裝的套件
+---
 
+## 支援安裝的套件
 - [x] [Vue](https://vuejs.org/)
   - [x] [ESLint](https://eslint.org/)
   - [x] [Prettier](https://prettier.io/)
