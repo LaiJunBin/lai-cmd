@@ -9,7 +9,7 @@
 ## 使用方式:
 
 ```
-$ npx lai-cmd@next init
+$ npx lai-cmd@latest init
 ```
 
 ### 選擇套件管理器

@@ -9,7 +9,7 @@ English ｜[繁體中文](https://github.com/LaiJunBin/lai-cmd/blob/develop/READ
 ## Usage:
 
 ```
-$ npx lai-cmd@next init
+$ npx lai-cmd@latest init
 ```
 
 ### Select Package Manager
