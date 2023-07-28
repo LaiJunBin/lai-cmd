@@ -4,9 +4,6 @@
 
 [English](https://github.com/LaiJunBin/lai-cmd/tree/develop#lai-cmd)｜繁體中文
 
-## TODO
-
-目前在許願階段，以下功能尚未完成。
 
 ## 使用方式:
 
@@ -14,33 +11,75 @@
 $ npx lai-cmd@next init
 ```
 
-## 功能
+### 選擇套件管理器
+![select-package-manager](./docs/images/select-package-manager.png)
 
-- [ ] 共同功能
-  - [ ] 自動偵測使用的框架
-  - [ ] 可選擇使用的套件管理器(e.g. npm, yarn, pnpm)
-  - [ ] 自動生成 VSCode 設定檔
-- [ ] Vanilla JS
-  - [ ] ESLint
-  - [ ] Prettier
-  - [ ] jsconfig
-- [ ] Vue 3
-  - [ ] ESLint
-  - [ ] Prettier
-  - [ ] Tailwindcss
-- [ ] React
-  - [ ] ESLint
-  - [ ] Prettier
-  - [ ] Tailwindcss
-- [ ] Svelte
-  - [ ] ESLint
-  - [ ] Prettier
-  - [ ] Tailwindcss
-  - [ ] Testing
-- [ ] 其他工具
-  - [ ] Husky
-    - [ ] Pre-commit
-    - [ ] Pre-push
-  - [ ] Commitlint
-    - [ ] Commitizen
-  - [ ] Lint-staged
+### 選擇框架
+![select-framework](./docs/images/select-framework.png)
+
+### 選擇要裝的套件
+![select-tools](./docs/images/select-tools.png)
+
+## 支援安裝的套件
+
+- [x] [Vue](https://vuejs.org/)
+  - [x] [ESLint](https://eslint.org/)
+  - [x] [Prettier](https://prettier.io/)
+  - [x] [StyleLint](https://stylelint.io/)
+  - [x] [Husky (pre-commit)](https://typicode.github.io/husky/)
+  - [x] [Lint-Staged](https://github.com/okonet/lint-staged)
+  - [x] [Tailwind](https://tailwindcss.com/)
+  - [x] [Mock Service Worker](https://mswjs.io/)
+    - [x] [Browser](https://mswjs.io/docs/getting-started/integrate/browser)
+    - [x] [Node](https://mswjs.io/docs/getting-started/integrate/node)
+    - [x] [mswx](https://github.com/LaiJunBin/mswx)
+- [x] [React](https://react.dev/)
+  - [x] [ESLint](https://eslint.org/)
+  - [x] [Prettier](https://prettier.io/)
+  - [x] [StyleLint](https://stylelint.io/)
+  - [x] [Husky (pre-commit)](https://typicode.github.io/husky/)
+  - [x] [Lint-Staged](https://github.com/okonet/lint-staged)
+  - [x] [Tailwind](https://tailwindcss.com/)
+  - [x] [Testing-Library](https://testing-library.com/)
+    - [x] Add Testing Library Example
+  - [x] [Mock Service Worker](https://mswjs.io/)
+    - [x] [Browser](https://mswjs.io/docs/getting-started/integrate/browser)
+    - [x] [Node](https://mswjs.io/docs/getting-started/integrate/node)
+    - [x] [mswx](https://github.com/LaiJunBin/mswx)
+- [x] [Svelte](https://svelte.dev/)
+  - [x] [ESLint](https://eslint.org/)
+  - [x] [Prettier](https://prettier.io/)
+  - [x] [StyleLint](https://stylelint.io/)
+  - [x] [Husky (pre-commit)](https://typicode.github.io/husky/)
+  - [x] [Lint-Staged](https://github.com/okonet/lint-staged)
+  - [x] [Tailwind](https://tailwindcss.com/)
+  - [x] [Testing-Library](https://testing-library.com/)
+    - [x] Add Testing Library Example
+  - [x] [Mock Service Worker](https://mswjs.io/)
+    - [x] [Browser](https://mswjs.io/docs/getting-started/integrate/browser)
+    - [x] [Node](https://mswjs.io/docs/getting-started/integrate/node)
+    - [x] [mswx](https://github.com/LaiJunBin/mswx)
+- [x] [SvelteKit](https://kit.svelte.dev/)
+  - [x] [ESLint](https://eslint.org/)
+  - [x] [Prettier](https://prettier.io/)
+  - [x] [StyleLint](https://stylelint.io/)
+  - [x] [Husky (pre-commit)](https://typicode.github.io/husky/)
+  - [x] [Lint-Staged](https://github.com/okonet/lint-staged)
+  - [x] [Tailwind](https://tailwindcss.com/)
+  - [x] [Testing-Library](https://testing-library.com/)
+    - [x] Add Testing Library Example
+  - [x] [Mock Service Worker](https://mswjs.io/)
+    - [x] [Browser](https://mswjs.io/docs/getting-started/integrate/browser)
+    - [x] [Node](https://mswjs.io/docs/getting-started/integrate/node)
+    - [x] [mswx](https://github.com/LaiJunBin/mswx)
+- [x] Others (Vanilla)
+  - [x] [ESLint](https://eslint.org/)
+  - [x] [Prettier](https://prettier.io/)
+  - [x] [StyleLint](https://stylelint.io/)
+  - [x] [Husky (pre-commit)](https://typicode.github.io/husky/)
+  - [x] [Lint-Staged](https://github.com/okonet/lint-staged)
+  - [x] [Tailwind](https://tailwindcss.com/)
+  - [x] [Mock Service Worker](https://mswjs.io/)
+    - [x] [Browser](https://mswjs.io/docs/getting-started/integrate/browser)
+    - [x] [Node](https://mswjs.io/docs/getting-started/integrate/node)
+    - [x] [mswx](https://github.com/LaiJunBin/mswx)
