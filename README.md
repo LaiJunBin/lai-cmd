@@ -6,6 +6,9 @@ English ｜[繁體中文](https://github.com/LaiJunBin/lai-cmd/blob/develop/READ
 
 ---
 
+## Environment Requirements
+* Node.js >= 18.0.0
+
 ## Usage:
 
 ```
