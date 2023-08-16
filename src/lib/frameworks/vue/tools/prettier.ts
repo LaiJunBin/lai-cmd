@@ -1,5 +1,6 @@
 import {
   addFormatScript,
+  initPrettierConfigFile,
   installPrettierDependencies,
   installPrettierDependenciesForESLint,
   updateESLintConfigFileForPrettier,
@@ -53,6 +54,8 @@ const install = async (framework: Framework) => {
   await installPrettierDependencies(framework, [
     '@vue/eslint-config-prettier@^7',
   ]);
+
+  initPrettierConfigFile();
   if (existESLintConfigFiles()) {
     console.log(
       yellow('ESLint config file found, install ESLint Prettier plugin')
