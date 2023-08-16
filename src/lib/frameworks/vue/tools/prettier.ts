@@ -39,10 +39,17 @@ function resolvePrettierPluginConflict() {
   const configFile = getESLintConfigFileName();
   const config = ConfigParser.parse(configFile);
   const pluginsValue = config.get('plugins', []);
+  const extendsValue = config.get('extends', []);
 
   if (pluginsValue.includes('prettier')) {
     pluginsValue.splice(pluginsValue.indexOf('prettier'), 1);
     config.put('plugins', pluginsValue);
+    config.save();
+  }
+
+  if (!extendsValue.includes('@vue/eslint-config-prettier')) {
+    extendsValue.push('@vue/eslint-config-prettier');
+    config.put('extends', extendsValue);
     config.save();
   }
 }
