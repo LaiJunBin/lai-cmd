@@ -1,6 +1,5 @@
 import {
   addFormatScript,
-  initPrettierConfigFile,
   installPrettierDependencies,
   installPrettierDependenciesForESLint,
   updateESLintConfigFileForPrettier,
@@ -34,6 +33,19 @@ function removePrettierSkipFormattingConfig() {
   }
 }
 
+function resolvePrettierPluginConflict() {
+  console.log(green('resolve prettier plugin conflict'));
+  const configFile = getESLintConfigFileName();
+  const config = ConfigParser.parse(configFile);
+  const pluginsValue = config.get('plugins', []);
+
+  if (pluginsValue.includes('prettier')) {
+    pluginsValue.splice(pluginsValue.indexOf('prettier'), 1);
+    config.put('plugins', pluginsValue);
+    config.save();
+  }
+}
+
 const install = async (framework: Framework) => {
   console.log(green('Prettier install'));
 
@@ -49,6 +61,7 @@ const install = async (framework: Framework) => {
     await installPrettierDependenciesForESLint(framework);
     updateESLintConfigFileForPrettier();
     removePrettierSkipFormattingConfig();
+    resolvePrettierPluginConflict();
   }
 
   await addFormatScript(framework, ['ts', 'js', 'json']);
