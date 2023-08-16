@@ -90,7 +90,10 @@ ${cssContent}
 
 export async function installTailwindPrettierPlugin(framework: Framework) {
   console.log(green('Install Prettier TailwindCSS plugin'));
-  await framework.packageManager.install(['prettier-plugin-tailwindcss'], true);
+  await framework.packageManager.install(
+    ['prettier-plugin-tailwindcss@^0.4'],
+    true
+  );
 }
 
 export function updatePrettierConfigFileForTailwind() {
