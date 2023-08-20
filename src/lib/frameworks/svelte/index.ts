@@ -8,6 +8,7 @@ import { createStyleLintTool } from '@/lib/common-tools/stylelint';
 import { createHuskyTool } from '@/lib/common-tools/husky';
 import { createLintStagedTool } from '@/lib/common-tools/lintstaged';
 import { createTailwindTool } from '@/lib/common-tools/tailwind';
+import { createZodTool } from '@/lib/common-tools/zod';
 
 export class Svelte extends Framework {
   constructor(packageManager: PackageManager) {
@@ -15,6 +16,7 @@ export class Svelte extends Framework {
     const Husky = createHuskyTool();
     const LintStaged = createLintStagedTool();
     const Tailwind = createTailwindTool('./src/app.css');
+    const Zod = createZodTool();
 
     const tools = [
       ESLint,
@@ -25,6 +27,7 @@ export class Svelte extends Framework {
       Tailwind,
       TestingLibrary,
       MSW,
+      Zod,
     ];
     super(packageManager, tools);
   }

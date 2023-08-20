@@ -8,6 +8,7 @@ import { TestingLibrary } from './tools/testing-library/testing-library';
 import { createHuskyTool } from '@/lib/common-tools/husky';
 import { createLintStagedTool } from '@/lib/common-tools/lintstaged';
 import { createTailwindTool } from '@/lib/common-tools/tailwind';
+import { createZodTool } from '@/lib/common-tools/zod';
 
 export class SvelteKit extends Framework {
   constructor(packageManager: PackageManager) {
@@ -15,6 +16,7 @@ export class SvelteKit extends Framework {
     const Husky = createHuskyTool();
     const LintStaged = createLintStagedTool();
     const Tailwind = createTailwindTool('./src/index.css');
+    const Zod = createZodTool();
 
     const tools = [
       ESLint,
@@ -25,6 +27,7 @@ export class SvelteKit extends Framework {
       Tailwind,
       TestingLibrary,
       MSW,
+      Zod,
     ];
     super(packageManager, tools);
   }
