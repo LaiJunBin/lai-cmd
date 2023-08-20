@@ -14,7 +14,7 @@ const createZodTool = () => {
   return new Tool.Builder()
     .setInstall(install)
     .setPromptChoice({
-      title: Tools.ZOD,
+      title: Tools.Zod,
     })
     .build();
 };

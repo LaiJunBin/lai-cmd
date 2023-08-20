@@ -16,7 +16,8 @@ export class React extends Framework {
     const Husky = createHuskyTool();
     const LintStaged = createLintStagedTool();
     const Tailwind = createTailwindTool('./src/index.css');
-    const zodTool = createZodTool();
+    const Zod = createZodTool();
+
     const tools = [
       ESLint,
       Prettier,
@@ -26,7 +27,7 @@ export class React extends Framework {
       Tailwind,
       TestingLibrary,
       MSW,
-      zodTool,
+      Zod,
     ];
     super(packageManager, tools);
   }

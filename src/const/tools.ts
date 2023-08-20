@@ -11,5 +11,5 @@ export const enum Tools {
   MSWBrowser = 'Browser',
   MSWNode = 'Node',
   MSWX = 'mswx',
-  ZOD = 'Zod',
+  Zod = 'Zod',
 }
