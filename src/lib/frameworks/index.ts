@@ -3,7 +3,7 @@ import { Vue } from './vue';
 import { React } from './react';
 import { Others } from './others';
 import { Framework } from '@/models/framework';
-import { SvelteKit } from './sveltekit/sveltekit';
+import { SvelteKit } from './sveltekit';
 
 Framework.register('Vue', Vue);
 Framework.register('React', React);
