@@ -7,6 +7,7 @@ import { createHuskyTool } from '@/lib/common-tools/husky';
 import { createLintStagedTool } from '@/lib/common-tools/lintstaged';
 import { createTailwindTool } from '@/lib/common-tools/tailwind';
 import { MSW } from './tools/msw/msw';
+import { createZodTool } from '@/lib/common-tools/zod';
 
 export class Vue extends Framework {
   constructor(packageManager: PackageManager) {
@@ -14,6 +15,8 @@ export class Vue extends Framework {
     const Husky = createHuskyTool();
     const LintStaged = createLintStagedTool();
     const Tailwind = createTailwindTool('./src/assets/base.css');
+    const Zod = createZodTool();
+
     const tools = [
       ESLint,
       Prettier,
@@ -22,6 +25,7 @@ export class Vue extends Framework {
       LintStaged,
       Tailwind,
       MSW,
+      Zod,
     ];
     super(packageManager, tools);
   }

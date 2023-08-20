@@ -8,6 +8,7 @@ import { createLintStagedTool } from '@/lib/common-tools/lintstaged';
 import { createTailwindTool } from '@/lib/common-tools/tailwind';
 import { MSW } from './tools/msw/msw';
 import { getDevLanguage } from '@/utils';
+import { createZodTool } from '@/lib/common-tools/zod';
 
 export class Others extends Framework {
   constructor(packageManager: PackageManager) {
@@ -17,6 +18,8 @@ export class Others extends Framework {
     const cssPath =
       getDevLanguage() === 'ts' ? './src/style.css' : './style.css';
     const Tailwind = createTailwindTool(cssPath);
+    const Zod = createZodTool();
+
     const tools = [
       ESLint,
       Prettier,
@@ -25,6 +28,7 @@ export class Others extends Framework {
       LintStaged,
       Tailwind,
       MSW,
+      Zod,
     ];
     super(packageManager, tools);
   }
