@@ -8,6 +8,7 @@ import { createLintStagedTool } from '@/lib/common-tools/lintstaged';
 import { createTailwindTool } from '@/lib/common-tools/tailwind';
 import { MSW } from './tools/msw/msw';
 import { TestingLibrary } from './tools/testing-library/testing-library';
+import { createZodTool } from '@/lib/common-tools/zod';
 
 export class React extends Framework {
   constructor(packageManager: PackageManager) {
@@ -15,6 +16,7 @@ export class React extends Framework {
     const Husky = createHuskyTool();
     const LintStaged = createLintStagedTool();
     const Tailwind = createTailwindTool('./src/index.css');
+    const zodTool = createZodTool();
     const tools = [
       ESLint,
       Prettier,
@@ -24,6 +26,7 @@ export class React extends Framework {
       Tailwind,
       TestingLibrary,
       MSW,
+      zodTool,
     ];
     super(packageManager, tools);
   }
