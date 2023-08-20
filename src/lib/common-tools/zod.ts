@@ -9,6 +9,7 @@ const createZodTool = () => {
     console.log(green('Zod install'));
     await installZodDependencies(framework);
     await updateTypeScriptConfig();
+    console.log(green('Zod install: done'));
   };
 
   return new Tool.Builder()

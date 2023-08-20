@@ -1,5 +1,5 @@
 import { Framework } from '@/models/framework';
-import { green } from 'kolorist';
+import { green, yellow } from 'kolorist';
 import { getDevLanguage, getScriptConfigFile } from '.';
 import { ConfigParser } from 'config-parser-master';
 
@@ -10,9 +10,11 @@ const installZodDependencies = async (framework: Framework) => {
 };
 
 const updateTypeScriptConfig = async () => {
+  console.log(green('Zod update tsconfig.json'));
   const devLang = getDevLanguage();
 
   if (devLang !== 'ts') {
+    console.log(yellow('Zod update tsconfig.json: not TypeScript, skip'));
     return;
   }
 
@@ -20,11 +22,17 @@ const updateTypeScriptConfig = async () => {
   const parsedTSConfig = ConfigParser.parse(tsConfig);
   const tsCompilerOptions = parsedTSConfig.get('compilerOptions') || {};
 
-  if (!tsCompilerOptions.strict) {
-    tsCompilerOptions.strict = true;
-    parsedTSConfig.put('compilerOptions', tsCompilerOptions);
-    parsedTSConfig.save();
+  if (tsCompilerOptions.strict === true) {
+    console.log(
+      yellow('Zod update tsconfig.json: strict already enabled, skip')
+    );
+    return;
   }
+
+  console.log(green('Zod update tsconfig.json: strict'));
+  tsCompilerOptions.strict = true;
+  parsedTSConfig.put('compilerOptions', tsCompilerOptions);
+  parsedTSConfig.save();
 };
 
 export { installZodDependencies, updateTypeScriptConfig };
