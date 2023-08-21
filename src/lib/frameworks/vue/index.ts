@@ -8,6 +8,7 @@ import { createLintStagedTool } from '@/lib/common-tools/lintstaged';
 import { createTailwindTool } from '@/lib/common-tools/tailwind';
 import { MSW } from './tools/msw/msw';
 import { createZodTool } from '@/lib/common-tools/zod';
+import { createAxiosTool } from '@/lib/common-tools/axios';
 
 export class Vue extends Framework {
   constructor(packageManager: PackageManager) {
@@ -16,6 +17,7 @@ export class Vue extends Framework {
     const LintStaged = createLintStagedTool();
     const Tailwind = createTailwindTool('./src/assets/base.css');
     const Zod = createZodTool();
+    const Axios = createAxiosTool();
 
     const tools = [
       ESLint,
@@ -26,6 +28,7 @@ export class Vue extends Framework {
       Tailwind,
       MSW,
       Zod,
+      Axios,
     ];
     super(packageManager, tools);
   }

@@ -12,4 +12,5 @@ export const enum Tools {
   MSWNode = 'Node',
   MSWX = 'mswx',
   Zod = 'Zod',
+  Axios = 'Axios',
 }

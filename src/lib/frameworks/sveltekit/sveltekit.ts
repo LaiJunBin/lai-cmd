@@ -9,6 +9,7 @@ import { createHuskyTool } from '@/lib/common-tools/husky';
 import { createLintStagedTool } from '@/lib/common-tools/lintstaged';
 import { createTailwindTool } from '@/lib/common-tools/tailwind';
 import { createZodTool } from '@/lib/common-tools/zod';
+import { createAxiosTool } from '@/lib/common-tools/axios';
 
 export class SvelteKit extends Framework {
   constructor(packageManager: PackageManager) {
@@ -17,6 +18,7 @@ export class SvelteKit extends Framework {
     const LintStaged = createLintStagedTool();
     const Tailwind = createTailwindTool('./src/index.css');
     const Zod = createZodTool();
+    const Axios = createAxiosTool();
 
     const tools = [
       ESLint,
@@ -28,6 +30,7 @@ export class SvelteKit extends Framework {
       TestingLibrary,
       MSW,
       Zod,
+      Axios,
     ];
     super(packageManager, tools);
   }
