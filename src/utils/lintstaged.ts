@@ -40,7 +40,7 @@ export async function installLintStaged(framework: Framework) {
   }
 
   if (commands.length) {
-    config.put('"*.{ts,js,tsx,jsx,cjs,svelte}"', commands);
+    config.put('"*.{ts,js,tsx,jsx,cjs,vue,svelte}"', commands);
   }
 
   if (
