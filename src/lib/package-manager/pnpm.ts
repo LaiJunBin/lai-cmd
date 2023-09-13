@@ -1,7 +1,7 @@
 import { PackageManager } from '@/models/package-manager';
 import { spawn } from 'child_process';
 
-export class Ppnpm extends PackageManager {
+export class Pnpm extends PackageManager {
   public async install(
     packageNames: string[],
     devDependencies = false
